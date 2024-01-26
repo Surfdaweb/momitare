@@ -8,6 +8,6 @@ describe("Page", () => {
     render(<Home />);
     const heading = screen.getByRole("heading", { level: 1 });
     expect(heading).toBeInTheDocument();
-    expect(heading.textContent).toEqual("Momitare")       ;
+    expect(heading.textContent).toEqual("Momitare");
   });
 });
