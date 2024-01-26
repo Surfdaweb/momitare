@@ -1,4 +1,5 @@
 # Momitare
+
 A double-deck solitare game that my mom told me about and asked to make digital
 
 ## Local Dev Setup
@@ -7,7 +8,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
 1. Install the following:
-    - [Node.js (version 20.11.0)](https://nodejs.org/en)
+   - [Node.js (version 20.11.0)](https://nodejs.org/en)
 2. Run `npm install` in the terminal
 3. Run `npm run dev` to run the site locally
 4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the site.

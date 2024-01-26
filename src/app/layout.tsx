@@ -6,7 +6,8 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Momitare",
-  description: "A double-deck solitare game that my mom told me about and asked to make digital.",
+  description:
+    "A double-deck solitare game that my mom told me about and asked to make digital.",
 };
 
 export default function RootLayout({

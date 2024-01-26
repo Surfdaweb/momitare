@@ -3,13 +3,13 @@
  * https://jestjs.io/docs/configuration
  */
 
-import type {Config} from '@jest/types';
-import nextJest from 'next/jest.js';
+import type { Config } from "@jest/types";
+import nextJest from "next/jest.js";
 
 const createJestConfig = nextJest({
   // Provide the path to your Next.js app to load next.config.js and .env files in your test environment
-  dir: './',
-})
+  dir: "./",
+});
 
 const config: Config.InitialOptions = {
   // All imported modules in your tests should be mocked automatically
@@ -34,9 +34,7 @@ const config: Config.InitialOptions = {
   // coverageDirectory: undefined,
 
   // An array of regexp pattern strings used to skip coverage collection
-  coveragePathIgnorePatterns: [
-    "\\\\node_modules\\\\"
-  ],
+  coveragePathIgnorePatterns: ["\\\\node_modules\\\\"],
 
   // Indicates which provider should be used to instrument code for coverage
   // coverageProvider: "babel",
