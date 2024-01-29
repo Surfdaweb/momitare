@@ -1,6 +1,7 @@
-# Momitare
+# Momitaire
 
-A double-deck solitare game that my mom told me about and asked to make digital
+A double-deck solitaire game that my mom told me about and asked to make digital.
+No, I didn't misspell the word solitaire on my public github repo, what are you talking about!?
 
 ## Local Dev Setup
 
