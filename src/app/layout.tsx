@@ -1,14 +1,11 @@
-import "./globals.css";
+import "./globals.scss";
 
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Momitare",
+  title: "Momitaire",
   description:
-    "A double-deck solitare game that my mom told me about and asked to make digital.",
+    "A double-deck solitaire game that my mom told me about and asked to make digital.",
 };
 
 export default function RootLayout({
@@ -18,7 +15,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body>
+        <div className={"container"}>{children}</div>
+      </body>
     </html>
   );
 }
