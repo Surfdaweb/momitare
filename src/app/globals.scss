@@ -1,0 +1,88 @@
+@import url("https://fonts.googleapis.com/css?family=Tauri:700|Tauri:400");
+$text: #ddeede;
+$background: #142415;
+$primary: #ffffff;
+$secondary: #000000;
+$accent: #901513;
+
+html {
+  font-size: 100%;
+} /* 16px */
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: "Tauri";
+  font-weight: 400;
+  color: $text;
+  background: $background;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: "Tauri";
+  font-weight: 700;
+}
+
+h1 {
+  font-size: 3.366rem; /* 53.92px */
+}
+
+h2 {
+  font-size: 2.525rem; /* 40.32px */
+}
+
+h3 {
+  font-size: 1.894rem; /* 30.24px */
+}
+
+h4 {
+  font-size: 1.421rem; /* 22.72px */
+}
+
+h5 {
+  font-size: 1.066rem; /* 17.12px */
+}
+
+small {
+  font-size: 0.6rem; /* 9.6px */
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  border: 0;
+  border-radius: 0.25rem;
+  background: $primary;
+  color: $background;
+  font-family: "Tauri", sans-serif;
+  font-size: 1rem;
+  line-height: 1.2rem;
+  white-space: nowrap;
+  text-decoration: none;
+  padding: 0.5rem 2rem;
+  cursor: pointer;
+}
+
+.container {
+  min-height: 100vh;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 2rem;
+}
