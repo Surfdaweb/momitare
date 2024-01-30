@@ -1,8 +1,12 @@
+import styles from "./page.module.css";
+
 export default function Home() {
   return (
     <>
       <h1>Momitaire</h1>
-      <button>Start Game</button>
+      <main className={styles.mainContent}>
+        <button className={styles.startGameBtn}>Start Game</button>
+      </main>
     </>
   );
 }
