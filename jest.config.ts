@@ -3,12 +3,12 @@
  * https://jestjs.io/docs/configuration
  */
 
-import type { Config } from "@jest/types";
-import nextJest from "next/jest.js";
+import type { Config } from '@jest/types';
+import nextJest from 'next/jest.js';
 
 const createJestConfig = nextJest({
   // Provide the path to your Next.js app to load next.config.js and .env files in your test environment
-  dir: "./",
+  dir: './'
 });
 
 const config: Config.InitialOptions = {
@@ -34,7 +34,7 @@ const config: Config.InitialOptions = {
   // coverageDirectory: undefined,
 
   // An array of regexp pattern strings used to skip coverage collection
-  coveragePathIgnorePatterns: ["\\\\node_modules\\\\"],
+  coveragePathIgnorePatterns: ['\\\\node_modules\\\\'],
 
   // Indicates which provider should be used to instrument code for coverage
   // coverageProvider: "babel",
@@ -150,7 +150,7 @@ const config: Config.InitialOptions = {
   // snapshotSerializers: [],
 
   // The test environment that will be used for testing
-  testEnvironment: "jsdom",
+  testEnvironment: 'jsdom'
 
   // Options that will be passed to the testEnvironment
   // testEnvironmentOptions: {},

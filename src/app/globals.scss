@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Tauri:700|Tauri:400");
+@import url('https://fonts.googleapis.com/css?family=Tauri:700|Tauri:400');
 $text: #ddeede;
 $background: #0d1a0e;
 $primary: #ffffff;
@@ -16,7 +16,7 @@ body {
 }
 
 body {
-  font-family: "Tauri", sans-serif;
+  font-family: 'Tauri', sans-serif;
   font-weight: 400;
   color: $text;
   display: flex;
@@ -25,8 +25,8 @@ body {
   --s: 10px; /* control the size */
   --c1: #122113;
   --c2: #1b311d;
-  --g: var(--c1) 3.125%, var(--c2) 0 9.375%, var(--c1) 0 15.625%,
-    var(--c2) 0 21.875%, var(--c1) 0 28.125%, #0000 0;
+  --g: var(--c1) 3.125%, var(--c2) 0 9.375%, var(--c1) 0 15.625%, var(--c2) 0 21.875%,
+    var(--c1) 0 28.125%, #0000 0;
   background:
     linear-gradient(
         225deg,
@@ -41,11 +41,7 @@ body {
     linear-gradient(45deg, var(--g)) calc(var(--s) / -2) calc(var(--s) / -2),
     linear-gradient(225deg, var(--g)) var(--s) 0,
     linear-gradient(225deg, var(--g)) calc(var(--s) / 2) var(--s),
-    repeating-linear-gradient(
-      -45deg,
-      var(--c1) -3.125% 3.125%,
-      var(--c2) 0 9.375%
-    );
+    repeating-linear-gradient(-45deg, var(--c1) -3.125% 3.125%, var(--c2) 0 9.375%);
   background-size: calc(2 * var(--s)) calc(2 * var(--s));
 }
 
@@ -54,7 +50,7 @@ h2,
 h3,
 h4,
 h5 {
-  font-family: "Tauri", sans-serif;
+  font-family: 'Tauri', sans-serif;
   font-weight: 400;
 }
 
@@ -98,7 +94,7 @@ button {
   border-radius: 0.25rem;
   background: $primary;
   color: $background;
-  font-family: "Tauri", sans-serif;
+  font-family: 'Tauri', sans-serif;
   font-size: 1rem;
   line-height: 1.2rem;
   white-space: nowrap;
