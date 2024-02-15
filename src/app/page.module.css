@@ -1,11 +1,4 @@
 .mainContent {
-  flex-grow: inherit;
   max-width: 1500px;
-  padding: 1rem;
   display: flex;
-}
-
-.startGameBtn {
-  margin: auto;
-  margin-top: 25vh;
 }

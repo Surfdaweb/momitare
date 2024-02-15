@@ -1,4 +1,5 @@
 import Footer from './footer/footer';
+import Game from './game/game';
 import styles from './page.module.css';
 import TopNav from './topNav/topNav';
 
@@ -7,7 +8,7 @@ export default function Home() {
     <>
       <TopNav></TopNav>
       <main className={styles.mainContent}>
-        <button className={styles.startGameBtn}>Start Game</button>
+        <Game></Game>
       </main>
       <Footer></Footer>
     </>
