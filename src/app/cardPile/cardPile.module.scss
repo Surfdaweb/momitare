@@ -1,7 +1,13 @@
-.faceDownCard {
+@import '../colors.scss';
+
+.card {
   height: 64px;
   width: 46px;
   padding: 0;
+  box-shadow: 4px 4px 4px rgb(0, 0, 0, 0.5);
+}
+
+.faceDownCard {
   box-shadow:
     inset 0px 0px 0px 4px #fff,
     4px 4px 4px rgb(0, 0, 0, 0.25);
@@ -57,12 +63,10 @@
 }
 
 .emptyPile {
-  height: 64px;
-  width: 46px;
   border: 1px solid #90af92;
   border-radius: 3px;
   background: none;
-  padding: 0;
+  box-shadow: none;
   color: #90af92;
   font-size: 1.5rem;
 }
