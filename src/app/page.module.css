@@ -1,8 +1,5 @@
 .mainContent {
+  max-width: 1500px;
   display: flex;
-}
-
-.startGameBtn {
-  margin: auto;
-  margin-top: 25vh;
+  align-self: center;
 }

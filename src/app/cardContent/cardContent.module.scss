@@ -1,0 +1,13 @@
+@import '../colors.scss';
+
+.cardValue {
+  width: 19px;
+  text-align: center;
+  letter-spacing: -0.1em;
+  padding: 3px 2px 3px;
+  font-size: 1.25em;
+}
+
+.redCard {
+  color: $accent;
+}

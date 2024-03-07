@@ -1,9 +1,5 @@
-@import url("https://fonts.googleapis.com/css?family=Tauri:700|Tauri:400");
-$text: #ddeede;
-$background: #142415;
-$primary: #ffffff;
-$secondary: #000000;
-$accent: #901513;
+@import url('https://fonts.googleapis.com/css?family=Tauri:700|Tauri:400');
+@import 'colors.scss';
 
 html {
   font-size: 100%;
@@ -16,10 +12,33 @@ body {
 }
 
 body {
-  font-family: "Tauri", sans-serif;
+  font-family: 'Tauri', sans-serif;
   font-weight: 400;
   color: $text;
-  background: $background;
+  display: flex;
+  flex-direction: column;
+
+  --s: 10px; /* control the size */
+  --c1: #122113;
+  --c2: #1b311d;
+  --g: var(--c1) 3.125%, var(--c2) 0 9.375%, var(--c1) 0 15.625%, var(--c2) 0 21.875%,
+    var(--c1) 0 28.125%, #0000 0;
+  background:
+    linear-gradient(
+        225deg,
+        #0000 3.125%,
+        var(--c2) 0 9.375%,
+        #0000 0 78.125%,
+        var(--c2) 0 84.375%,
+        #0000 0
+      )
+      0 calc(var(--s) / 2),
+    linear-gradient(45deg, var(--g)) 0 var(--s),
+    linear-gradient(45deg, var(--g)) calc(var(--s) / -2) calc(var(--s) / -2),
+    linear-gradient(225deg, var(--g)) var(--s) 0,
+    linear-gradient(225deg, var(--g)) calc(var(--s) / 2) var(--s),
+    repeating-linear-gradient(-45deg, var(--c1) -3.125% 3.125%, var(--c2) 0 9.375%);
+  background-size: calc(2 * var(--s)) calc(2 * var(--s));
 }
 
 h1,
@@ -27,32 +46,32 @@ h2,
 h3,
 h4,
 h5 {
-  font-family: "Tauri", sans-serif;
-  font-weight: 700;
+  font-family: 'Tauri', sans-serif;
+  font-weight: 400;
 }
 
 h1 {
-  font-size: 3.366rem; /* 53.92px */
+  font-size: 1.99rem; /* 31.84px */
 }
 
 h2 {
-  font-size: 2.525rem; /* 40.32px */
+  font-size: 1.658rem; /* 26.56px */
 }
 
 h3 {
-  font-size: 1.894rem; /* 30.24px */
+  font-size: 1.382rem; /* 22.08px */
 }
 
 h4 {
-  font-size: 1.421rem; /* 22.72px */
+  font-size: 1.152rem; /* 18.4px */
 }
 
 h5 {
-  font-size: 1.066rem; /* 17.12px */
+  font-size: 0.96rem; /* 15.36px */
 }
 
 small {
-  font-size: 0.6rem; /* 9.6px */
+  font-size: 0.667rem; /* 10.72px */
 }
 
 * {
@@ -71,7 +90,7 @@ button {
   border-radius: 0.25rem;
   background: $primary;
   color: $background;
-  font-family: "Tauri", sans-serif;
+  font-family: 'Tauri', sans-serif;
   font-size: 1rem;
   line-height: 1.2rem;
   white-space: nowrap;
@@ -81,8 +100,8 @@ button {
 }
 
 .container {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
-  max-width: 1500px;
-  margin: 0 auto;
-  padding: 2rem;
 }
