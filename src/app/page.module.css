@@ -1,4 +1,5 @@
 .mainContent {
   max-width: 1500px;
   display: flex;
+  align-self: center;
 }

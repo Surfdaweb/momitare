@@ -6,6 +6,10 @@ import React from 'react';
 import Game from './game';
 
 describe('Game', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('renders itself without errors', () => {
     render(<Game />);
   });
@@ -29,8 +33,28 @@ describe('Game', () => {
       const tableauPiles = within(tableauSection).getAllByRole('button');
 
       expect(tableauPiles.length).toEqual(14);
-      tableauPiles.forEach((pile) => {
+      tableauPiles.forEach((pile, index) => {
         expect(pile).toBeVisible();
+        switch (index) {
+          case 0:
+            expect(within(pile).getByText('A')).toBeVisible();
+            break;
+          case 10:
+            expect(within(pile).getByText('S')).toBeVisible();
+            break;
+          case 11:
+            expect(within(pile).getByText('J')).toBeVisible();
+            break;
+          case 12:
+            expect(within(pile).getByText('Q')).toBeVisible();
+            break;
+          case 13:
+            expect(within(pile).getByText('K')).toBeVisible();
+            break;
+          default:
+            expect(within(pile).getByText(index + 1)).toBeVisible();
+            break;
+        }
       });
     });
 
@@ -40,6 +64,7 @@ describe('Game', () => {
       const pile = within(hand).getByRole('button');
 
       expect(pile).toBeVisible();
+      expect(within(pile).queryByText('D')).not.toBeInTheDocument();
     });
   });
 });
