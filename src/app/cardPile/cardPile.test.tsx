@@ -49,7 +49,7 @@ describe('CardPile', () => {
         const cardPile = screen.getByRole('button');
         expect(cardPile).toBeVisible();
         expect(screen.queryByText('2')).not.toBeInTheDocument();
-        expect(screen.queryByAltText('of hearts')).not.toBeInTheDocument();
+        expect(screen.queryByAltText('of Hearts')).not.toBeInTheDocument();
       });
     });
     describe('when the pile is face-up', () => {
@@ -68,7 +68,7 @@ describe('CardPile', () => {
         expect(cardPile).toBeVisible();
         expect(cardPile).not.toBeDisabled();
         expect(screen.getByText('2')).toBeVisible();
-        expect(screen.getByAltText('of hearts')).toBeVisible();
+        expect(screen.getByAltText('of Hearts')).toBeVisible();
       });
     });
   });

@@ -42,16 +42,16 @@ export default function CardContent({ card }: CardProps) {
 
   switch (card.suit) {
     case Suit.Clubs:
-      suitLabel = 'clubs';
+      suitLabel = 'Clubs';
       break;
     case Suit.Diamonds:
-      suitLabel = 'diamonds';
+      suitLabel = 'Diamonds';
       break;
     case Suit.Hearts:
-      suitLabel = 'hearts';
+      suitLabel = 'Hearts';
       break;
     case Suit.Spades:
-      suitLabel = 'spades';
+      suitLabel = 'Spades';
       break;
     default:
       suitLabel = 'error';

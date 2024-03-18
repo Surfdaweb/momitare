@@ -51,8 +51,32 @@ describe('CardContent', () => {
     expect(screen.getByText('K')).toBeVisible();
   });
 
-  it('renders the correct suit of the card', () => {
+  it('renders the correct suit for Hearts', () => {
     render(<CardContent {...defaultProps} />);
-    expect(screen.getByAltText('of hearts')).toBeVisible();
+    expect(screen.getByAltText('of Hearts')).toBeVisible();
+  });
+
+  it('renders the correct suit for Clubs', () => {
+    const myProps: CardProps = {
+      card: { suit: Suit.Clubs, value: 1 }
+    };
+    render(<CardContent {...myProps} />);
+    expect(screen.getByAltText('of Clubs')).toBeVisible();
+  });
+
+  it('renders the correct suit for Diamonds', () => {
+    const myProps: CardProps = {
+      card: { suit: Suit.Diamonds, value: 1 }
+    };
+    render(<CardContent {...myProps} />);
+    expect(screen.getByAltText('of Diamonds')).toBeVisible();
+  });
+
+  it('renders the correct suit for Spades', () => {
+    const myProps: CardProps = {
+      card: { suit: Suit.Spades, value: 1 }
+    };
+    render(<CardContent {...myProps} />);
+    expect(screen.getByAltText('of Spades')).toBeVisible();
   });
 });

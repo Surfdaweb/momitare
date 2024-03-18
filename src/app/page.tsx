@@ -1,5 +1,5 @@
 import Footer from './footer/footer';
-import Game from './game/game';
+import GameLogic from './gameLogic/gameLogic';
 import styles from './page.module.css';
 import TopNav from './topNav/topNav';
 
@@ -8,7 +8,7 @@ export default function Home() {
     <>
       <TopNav></TopNav>
       <main className={styles.mainContent}>
-        <Game></Game>
+        <GameLogic></GameLogic>
       </main>
       <Footer></Footer>
     </>
