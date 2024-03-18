@@ -27,12 +27,21 @@ export const buildDeck = () => {
   return shuffleDeck(buildingDeck);
 };
 
+const dealNewGame = (): Card[][] => {
+  const deck: Card[] = buildDeck();
+  const newTableau: Card[][] = [[], [], [], [], [], [], [], [], [], [], [], [], [], []];
+
+  deck.map((card, index) => {
+    console.log(`Pile ${index % 14} added ${card.value}`);
+    newTableau[index % 14].push(card);
+  });
+
+  return newTableau;
+};
+
 export default function GameLogic() {
   const foundations: Card[][] = [[], [], [], [], [], [], [], []];
-  const tableau: Card[][] = [[], [], [], [], [], [], [], [], [], [], [], [], [], []];
-
-  const deck: Card[] = buildDeck();
-  console.log(deck);
+  const tableau: Card[][] = dealNewGame();
 
   return <Game foundations={foundations} tableau={tableau} />;
 }

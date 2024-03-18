@@ -1,25 +1,27 @@
-import { render } from '@testing-library/react';
+import '@testing-library/jest-dom';
+
+import { render, screen, within } from '@testing-library/react';
 import React from 'react';
 
 import { Card, Suit } from '../cardContent/cardContent';
 import GameLogic, { buildDeck } from './gameLogic';
 
 const expectedDeck: Card[] = [
-  { value: 1, suit: Suit.Hearts },
+  { value: 1, suit: Suit.Hearts }, //A
   { value: 1, suit: Suit.Spades },
   { value: 1, suit: Suit.Spades },
   { value: 1, suit: Suit.Diamonds },
   { value: 1, suit: Suit.Diamonds },
   { value: 1, suit: Suit.Clubs },
-  { value: 1, suit: Suit.Clubs },
+  { value: 1, suit: Suit.Clubs }, //7
 
-  { value: 2, suit: Suit.Hearts },
+  { value: 2, suit: Suit.Hearts }, //8
   { value: 2, suit: Suit.Hearts },
   { value: 2, suit: Suit.Spades },
   { value: 2, suit: Suit.Spades },
   { value: 2, suit: Suit.Diamonds },
   { value: 2, suit: Suit.Diamonds },
-  { value: 2, suit: Suit.Clubs },
+  { value: 2, suit: Suit.Clubs }, //K
   { value: 2, suit: Suit.Clubs },
 
   { value: 3, suit: Suit.Hearts },
@@ -105,7 +107,7 @@ const expectedDeck: Card[] = [
 
   { value: 12, suit: Suit.Hearts },
   { value: 12, suit: Suit.Hearts },
-  { value: 12, suit: Suit.Spades }, //7
+  { value: 12, suit: Suit.Spades },
   { value: 12, suit: Suit.Spades },
   { value: 12, suit: Suit.Diamonds },
   { value: 12, suit: Suit.Diamonds },
@@ -114,13 +116,12 @@ const expectedDeck: Card[] = [
 
   { value: 13, suit: Suit.Hearts },
   { value: 13, suit: Suit.Hearts },
-
-  { value: 13, suit: Suit.Spades }, //A
+  { value: 13, suit: Suit.Spades },
   { value: 13, suit: Suit.Spades },
   { value: 13, suit: Suit.Diamonds },
   { value: 13, suit: Suit.Diamonds },
   { value: 13, suit: Suit.Clubs },
-  { value: 13, suit: Suit.Clubs }, //6
+  { value: 13, suit: Suit.Clubs },
 
   { value: 1, suit: Suit.Hearts }
 ];
@@ -137,9 +138,34 @@ describe('GameLogic', () => {
     it('renders itself without errors', () => {
       render(<GameLogic />);
     });
+
+    describe('when the game starts', () => {
+      it('seeds the tableau piles correctly', () => {
+        render(<GameLogic />);
+        const tableauSection = screen.getByTestId('tableau');
+        const tableauPiles = within(tableauSection).getAllByRole('button');
+
+        expect(tableauPiles.length).toEqual(14);
+        tableauPiles.forEach((pile, index) => {
+          expect(pile).toBeVisible();
+          const expectedValue = index < 7 ? 'A' : '2';
+
+          let expectedSuit = 'of Hearts';
+          if (index === 1 || index === 2 || index === 9 || index === 10) {
+            expectedSuit = 'of Spades';
+          } else if (index === 3 || index === 4 || index === 11 || index === 12) {
+            expectedSuit = 'of Diamonds';
+          } else if (index === 5 || index === 6 || index === 13) {
+            expectedSuit = 'of Clubs';
+          }
+          expect(within(pile).getByText(`${expectedValue}`)).toBeVisible();
+          expect(within(pile).getByAltText(expectedSuit)).toBeVisible();
+        });
+      });
+    });
   });
 
-  describe('building the dealer deck', () => {
+  describe('when the dealer deck is built', () => {
     it('adds all cards for a double-deck game', () => {
       const result = buildDeck();
       expect(result.length).toEqual(104);
@@ -148,7 +174,6 @@ describe('GameLogic', () => {
     });
     it('shuffles the cards', () => {
       const result = buildDeck();
-      console.log(result);
       expect(result).toStrictEqual(expectedDeck);
     });
   });
