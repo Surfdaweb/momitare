@@ -32,7 +32,6 @@ const dealNewGame = (): Card[][] => {
   const newTableau: Card[][] = [[], [], [], [], [], [], [], [], [], [], [], [], [], []];
 
   deck.map((card, index) => {
-    console.log(`Pile ${index % 14} added ${card.value}`);
     newTableau[index % 14].push(card);
   });
 
