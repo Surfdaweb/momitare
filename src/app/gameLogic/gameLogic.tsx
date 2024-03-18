@@ -1,4 +1,5 @@
 import { Card } from '../cardContent/cardContent';
+import Game from '../game/game';
 
 export const buildDeck = () => {
   const buildingDeck: Card[] = [];
@@ -25,3 +26,13 @@ export const buildDeck = () => {
   }
   return shuffleDeck(buildingDeck);
 };
+
+export default function GameLogic() {
+  const foundations: Card[][] = [[], [], [], [], [], [], [], []];
+  const tableau: Card[][] = [[], [], [], [], [], [], [], [], [], [], [], [], [], []];
+
+  const deck: Card[] = buildDeck();
+  console.log(deck);
+
+  return <Game foundations={foundations} tableau={tableau} />;
+}
