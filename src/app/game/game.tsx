@@ -25,15 +25,15 @@ export default function Game({ foundations, tableau }: GameProps) {
         <div className={styles.tableau} data-testid="tableau">
           {tableau.map((cards, index) => {
             let label = `${index + 1}`;
-            if (index == 0) {
+            if (index === 0) {
               label = 'A';
-            } else if (index == 10) {
+            } else if (index === 10) {
               label = 'S';
-            } else if (index == 11) {
+            } else if (index === 11) {
               label = 'J';
-            } else if (index == 12) {
+            } else if (index === 12) {
               label = 'Q';
-            } else if (index == 13) {
+            } else if (index === 13) {
               label = 'K';
             }
 
@@ -41,7 +41,7 @@ export default function Game({ foundations, tableau }: GameProps) {
               <CardPile
                 key={index}
                 name={`Tableau ${index + 1}`}
-                isFaceUp={true}
+                isFaceUp={label === 'S' ? false : true}
                 cards={cards}
                 label={label}
               />

@@ -158,8 +158,14 @@ describe('GameLogic', () => {
           } else if (index === 5 || index === 6 || index === 13) {
             expectedSuit = 'of Clubs';
           }
-          expect(within(pile).getByText(`${expectedValue}`)).toBeVisible();
-          expect(within(pile).getByAltText(expectedSuit)).toBeVisible();
+
+          if (index === 10) {
+            expect(within(pile).queryByText(`${expectedValue}`)).not.toBeInTheDocument();
+            expect(within(pile).queryByAltText(expectedSuit)).not.toBeInTheDocument();
+          } else {
+            expect(within(pile).getByText(`${expectedValue}`)).toBeVisible();
+            expect(within(pile).getByAltText(expectedSuit)).toBeVisible();
+          }
         });
       });
     });
