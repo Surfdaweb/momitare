@@ -56,8 +56,8 @@ describe('CardPile', () => {
       it('renders the value of the top card', () => {
         const myProps: CardPileProps = {
           cards: [
-            { suit: Suit.Hearts, value: 2 },
-            { suit: Suit.Spades, value: 12 }
+            { suit: Suit.Spades, value: 12 },
+            { suit: Suit.Hearts, value: 2 }
           ],
           isFaceUp: true,
           ...defaultProps

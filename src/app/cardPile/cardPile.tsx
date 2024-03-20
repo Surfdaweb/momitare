@@ -32,7 +32,7 @@ export default function CardPile({
         ${isFaceUp ? styles.faceUpCard : styles.faceDownCard}
       `}
     >
-      {isFaceUp && <CardContent card={cards[0]} />}
+      {isFaceUp && <CardContent card={cards[cards.length - 1]} />}
     </button>
   );
 }
