@@ -1,14 +1,16 @@
+'use client';
 import CardContent, { Card } from '../cardContent/cardContent';
 import CardPile from '../cardPile/cardPile';
 import styles from './game.module.scss';
 
 export type GameProps = {
+  drawCard: () => void;
   foundations: Card[][];
   hand: Card[];
   tableau: Card[][];
 };
 
-export default function Game({ foundations, tableau, hand }: GameProps) {
+export default function Game({ drawCard, foundations, tableau, hand }: GameProps) {
   return (
     <>
       <div className={styles.gameContainer}>
@@ -19,17 +21,25 @@ export default function Game({ foundations, tableau, hand }: GameProps) {
               label = 'K';
             }
             return (
-              <CardPile key={index} name={`Foundation ${index}`} cards={cards} label={label} />
+              <CardPile
+                handleCardPileInteract={() => {}}
+                key={index}
+                name={`Foundation ${index}`}
+                cards={cards}
+                label={label}
+              />
             );
           })}
         </div>
         <div className={styles.tableau} data-testid="tableau">
           {tableau.map((cards, index) => {
             let label = `${index + 1}`;
+            let handleCardPileInteract = () => {};
             if (index === 0) {
               label = 'A';
             } else if (index === 10) {
               label = 'S';
+              handleCardPileInteract = drawCard;
             } else if (index === 11) {
               label = 'J';
             } else if (index === 12) {
@@ -40,6 +50,7 @@ export default function Game({ foundations, tableau, hand }: GameProps) {
 
             return (
               <CardPile
+                handleCardPileInteract={() => handleCardPileInteract()}
                 key={index}
                 name={`Tableau ${index + 1}`}
                 isFaceUp={label === 'S' ? false : true}

@@ -31,9 +31,47 @@ const dealNewGame = (): Card[][] => {
   const deck: Card[] = buildDeck();
   const newTableau: Card[][] = [[], [], [], [], [], [], [], [], [], [], [], [], [], []];
 
-  deck.map((card, index) => {
-    newTableau[index % 14].push(card);
-  });
+  let newTableauIndex = 0;
+  while (deck.length > 0) {
+    const originalCardDealt = deck.pop();
+    if (originalCardDealt) {
+      newTableau[newTableauIndex].push(originalCardDealt);
+
+      if (newTableauIndex === 6 || newTableauIndex === 13) {
+        const endOfRowCard = deck.pop();
+        if (!endOfRowCard) {
+          break;
+        }
+        newTableau[10].push(endOfRowCard);
+      }
+
+      if (newTableauIndex != 10 && originalCardDealt.value === 1) {
+        const aceCard = deck.pop();
+        if (!aceCard) {
+          break;
+        }
+        newTableau[10].push(aceCard);
+      }
+
+      if (
+        newTableauIndex != 10 &&
+        ((originalCardDealt.value < 11 && originalCardDealt.value === newTableauIndex + 1) ||
+          (originalCardDealt.value > 10 && originalCardDealt.value === newTableauIndex))
+      ) {
+        const matchingCard = deck.pop();
+        if (!matchingCard) {
+          break;
+        }
+        newTableau[10].push(matchingCard);
+      }
+
+      if (newTableauIndex > 12) {
+        newTableauIndex = 0;
+      } else {
+        newTableauIndex++;
+      }
+    }
+  }
 
   return newTableau;
 };
@@ -41,6 +79,17 @@ const dealNewGame = (): Card[][] => {
 export default function GameLogic() {
   const foundations: Card[][] = [[], [], [], [], [], [], [], []];
   const tableau: Card[][] = dealNewGame();
+  const hand: Card[] = [];
 
-  return <Game foundations={foundations} tableau={tableau} />;
+  return (
+    <Game
+      drawCard={async () => {
+        'use server';
+        console.log('draw card');
+      }}
+      foundations={foundations}
+      tableau={tableau}
+      hand={hand}
+    />
+  );
 }

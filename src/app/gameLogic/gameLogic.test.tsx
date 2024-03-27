@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom';
 
 import { render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import React from 'react';
 
 import { Card, Suit } from '../cardContent/cardContent';
@@ -170,6 +171,23 @@ describe('GameLogic', () => {
             expect(within(pile).getByAltText(expectedSuit)).toBeVisible();
           }
         });
+      });
+    });
+
+    describe('when a card is drawn', () => {
+      it('puts the drawn card in the Hand section', () => {
+        const user = userEvent.setup();
+
+        render(<GameLogic />);
+
+        const tableauSection = screen.getByTestId('tableau');
+        const tableauPiles = within(tableauSection).getAllByRole('button');
+        const stockPile = tableauPiles[10];
+
+        user.click(stockPile);
+        const hand = screen.getByTestId('hand');
+        expect(within(hand).findByText('A')).toBeVisible();
+        expect(within(hand).findByAltText('of Hearts')).toBeVisible();
       });
     });
   });

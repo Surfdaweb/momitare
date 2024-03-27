@@ -10,7 +10,9 @@ import CardPile, { CardPileProps } from './cardPile';
 const defaultProps: CardPileProps = {
   name: 'Ace',
   label: 'A',
-  handleCardPileInteract: () => null
+  handleCardPileInteract: () => {
+    console.log('card pile handled');
+  }
 };
 
 describe('CardPile', () => {
@@ -86,7 +88,8 @@ describe('CardPile', () => {
       };
       render(<CardPile {...myProps} />);
 
-      user.click(await screen.findByRole('button'));
+      const pile = screen.getByRole('button');
+      await user.click(pile);
       expect(handleCardPileInteractSpy).toHaveBeenCalled();
     });
   });

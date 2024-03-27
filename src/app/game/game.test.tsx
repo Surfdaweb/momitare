@@ -4,15 +4,20 @@ import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
-import { Suit } from '../cardContent/cardContent';
+import { Card, Suit } from '../cardContent/cardContent';
 import Game, { GameProps } from './game';
 
 const defaultProps: GameProps = {
+  drawCard: () => {},
   foundations: [[], [], [], [], [], [], [], []],
-  tableau: [[], [], [], [], [], [], [], [], [], [], [], [], [], []]
+  tableau: [[], [], [], [], [], [], [], [], [], [], [], [], [], []],
+  hand: []
 };
 
 describe('Game', () => {
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
   it('renders itself without errors', () => {
     render(<Game {...defaultProps} />);
   });
@@ -83,26 +88,14 @@ describe('Game', () => {
   });
 
   describe('when a player draws a card', () => {
-    it('puts the drawn card in the Hand section', () => {
+    it('calls the drawCard function', async () => {
       const user = userEvent.setup();
-      const myProps = {
+      const drawCardSpy = jest.fn();
+      const card: Card = { value: 1, suit: Suit.Hearts };
+      const myProps: GameProps = {
         ...defaultProps,
-        tableau: [
-          [{ value: 2, suit: Suit.Spades }],
-          [{ value: 3, suit: Suit.Spades }],
-          [{ value: 4, suit: Suit.Spades }],
-          [{ value: 5, suit: Suit.Spades }],
-          [{ value: 6, suit: Suit.Diamonds }],
-          [{ value: 7, suit: Suit.Diamonds }],
-          [{ value: 8, suit: Suit.Diamonds }],
-          [{ value: 9, suit: Suit.Diamonds }],
-          [{ value: 10, suit: Suit.Clubs }],
-          [{ value: 2, suit: Suit.Clubs }],
-          [{ value: 3, suit: Suit.Clubs }], //S
-          [{ value: 4, suit: Suit.Clubs }],
-          [{ value: 5, suit: Suit.Hearts }],
-          [{ value: 6, suit: Suit.Hearts }]
-        ]
+        tableau: [[], [], [], [], [], [], [], [], [], [], [card], [], [], []],
+        drawCard: drawCardSpy
       };
       render(<Game {...myProps} />);
 
@@ -110,11 +103,8 @@ describe('Game', () => {
       const tableauPiles = within(tableauSection).getAllByRole('button');
       const stockPile = tableauPiles[10];
 
-      user.click(stockPile);
-      const hand = screen.getByTestId('hand');
-      expect(within(hand).findByText('3')).toBeVisible();
-      expect(within(hand).findByAltText('of Clubs')).toBeVisible();
-      expect(within(stockPile).findByText('S')).toBeVisible();
+      await user.click(stockPile);
+      expect(drawCardSpy).toHaveBeenCalled();
     });
   });
 

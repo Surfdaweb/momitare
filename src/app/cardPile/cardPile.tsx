@@ -1,9 +1,10 @@
+'use client';
 import CardContent, { Card } from '../cardContent/cardContent';
 import styles from './cardPile.module.scss';
 
 export interface CardPileProps {
   cards?: Card[];
-  handleCardPileInteract: () => null;
+  handleCardPileInteract: () => void;
   isFaceUp?: boolean;
   label: string;
   name: string;
@@ -30,7 +31,7 @@ export default function CardPile({
 
   return (
     <button
-      onClick={handleCardPileInteract}
+      onClick={() => handleCardPileInteract()}
       className={`${styles.card} 
         ${isFaceUp ? styles.faceUpCard : styles.faceDownCard}
       `}
