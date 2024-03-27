@@ -1,13 +1,14 @@
-import { Card } from '../cardContent/cardContent';
+import CardContent, { Card } from '../cardContent/cardContent';
 import CardPile from '../cardPile/cardPile';
 import styles from './game.module.scss';
 
 export type GameProps = {
   foundations: Card[][];
+  hand: Card[];
   tableau: Card[][];
 };
 
-export default function Game({ foundations, tableau }: GameProps) {
+export default function Game({ foundations, tableau, hand }: GameProps) {
   return (
     <>
       <div className={styles.gameContainer}>
@@ -47,6 +48,10 @@ export default function Game({ foundations, tableau }: GameProps) {
               />
             );
           })}
+        </div>
+        <div data-testid="hand">
+          {hand.length > 0 &&
+            hand.map((card, index) => <CardContent key={index} card={card}></CardContent>)}
         </div>
       </div>
     </>
