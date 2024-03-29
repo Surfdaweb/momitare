@@ -175,7 +175,7 @@ describe('GameLogic', () => {
     });
 
     describe('when a card is drawn', () => {
-      it('puts the drawn card in the Hand section', () => {
+      it('puts the drawn card in the Hand section', async () => {
         const user = userEvent.setup();
 
         render(<GameLogic />);
@@ -184,10 +184,10 @@ describe('GameLogic', () => {
         const tableauPiles = within(tableauSection).getAllByRole('button');
         const stockPile = tableauPiles[10];
 
-        user.click(stockPile);
+        await user.click(stockPile);
         const hand = screen.getByTestId('hand');
-        expect(within(hand).findByText('A')).toBeVisible();
-        expect(within(hand).findByAltText('of Hearts')).toBeVisible();
+        expect(within(hand).getByText('A')).toBeVisible();
+        expect(within(hand).getByAltText('of Hearts')).toBeVisible();
       });
     });
   });

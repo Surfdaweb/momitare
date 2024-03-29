@@ -1,3 +1,6 @@
+'use client';
+import { useState } from 'react';
+
 import { Card } from '../cardContent/cardContent';
 import Game from '../game/game';
 
@@ -78,18 +81,24 @@ const dealNewGame = (): Card[][] => {
 
 export default function GameLogic() {
   const foundations: Card[][] = [[], [], [], [], [], [], [], []];
-  const tableau: Card[][] = dealNewGame();
-  const hand: Card[] = [];
+  const [tableau, setTableau] = useState<Card[][]>(dealNewGame());
+  const [hand, setHand] = useState<Card[]>([]);
 
-  return (
-    <Game
-      drawCard={async () => {
-        'use server';
-        console.log('draw card');
-      }}
-      foundations={foundations}
-      tableau={tableau}
-      hand={hand}
-    />
-  );
+  const drawCard = async () => {
+    const stockPile = tableau[10].map((card) => card);
+    const drawnCard = stockPile.pop();
+
+    if (drawnCard) {
+      const newTableau = tableau.map((pile, index) => {
+        if (index === 10) {
+          return stockPile;
+        }
+        return tableau[index];
+      });
+      setTableau(newTableau);
+      setHand([drawnCard]);
+    }
+  };
+
+  return <Game drawCard={drawCard} foundations={foundations} tableau={tableau} hand={hand} />;
 }
