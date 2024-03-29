@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom';
 
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import React from 'react';
 
 import { Suit } from '../cardContent/cardContent';
@@ -8,10 +9,16 @@ import CardPile, { CardPileProps } from './cardPile';
 
 const defaultProps: CardPileProps = {
   name: 'Ace',
-  label: 'A'
+  label: 'A',
+  handleCardPileInteract: () => {
+    console.log('card pile handled');
+  }
 };
 
 describe('CardPile', () => {
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
   it('renders itself', () => {
     render(<CardPile {...defaultProps} />);
   });
@@ -30,8 +37,8 @@ describe('CardPile', () => {
     describe('when the pile is face-down', () => {
       it('renders a pile of face-down cards', () => {
         const myProps: CardPileProps = {
-          cards: [{ suit: Suit.Hearts, value: 12 }],
-          ...defaultProps
+          ...defaultProps,
+          cards: [{ suit: Suit.Hearts, value: 12 }]
         };
         render(<CardPile {...myProps} />);
 
@@ -41,8 +48,8 @@ describe('CardPile', () => {
       });
       it('does NOT show the value of the top card', () => {
         const myProps: CardPileProps = {
-          cards: [{ suit: Suit.Hearts, value: 2 }],
-          ...defaultProps
+          ...defaultProps,
+          cards: [{ suit: Suit.Hearts, value: 2 }]
         };
         render(<CardPile {...myProps} />);
 
@@ -55,12 +62,12 @@ describe('CardPile', () => {
     describe('when the pile is face-up', () => {
       it('renders the value of the top card', () => {
         const myProps: CardPileProps = {
+          ...defaultProps,
           cards: [
             { suit: Suit.Spades, value: 12 },
             { suit: Suit.Hearts, value: 2 }
           ],
-          isFaceUp: true,
-          ...defaultProps
+          isFaceUp: true
         };
         render(<CardPile {...myProps} />);
 
@@ -70,6 +77,20 @@ describe('CardPile', () => {
         expect(screen.getByText('2')).toBeVisible();
         expect(screen.getByAltText('of Hearts')).toBeVisible();
       });
+    });
+    it('calls handlePileInteract when the card pile is clicked', async () => {
+      const user = userEvent.setup();
+      const handleCardPileInteractSpy = jest.fn();
+      const myProps: CardPileProps = {
+        ...defaultProps,
+        cards: [{ suit: Suit.Hearts, value: 12 }],
+        handleCardPileInteract: handleCardPileInteractSpy
+      };
+      render(<CardPile {...myProps} />);
+
+      const pile = screen.getByRole('button');
+      await user.click(pile);
+      expect(handleCardPileInteractSpy).toHaveBeenCalled();
     });
   });
 });

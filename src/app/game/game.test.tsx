@@ -1,17 +1,23 @@
 import '@testing-library/jest-dom';
 
 import { render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import React from 'react';
 
-import { Suit } from '../cardContent/cardContent';
+import { Card, Suit } from '../cardContent/cardContent';
 import Game, { GameProps } from './game';
 
 const defaultProps: GameProps = {
+  drawCard: () => {},
   foundations: [[], [], [], [], [], [], [], []],
-  tableau: [[], [], [], [], [], [], [], [], [], [], [], [], [], []]
+  tableau: [[], [], [], [], [], [], [], [], [], [], [], [], [], []],
+  hand: []
 };
 
 describe('Game', () => {
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
   it('renders itself without errors', () => {
     render(<Game {...defaultProps} />);
   });
@@ -78,6 +84,27 @@ describe('Game', () => {
           expect(within(pile).getByAltText(expectedSuit)).toBeVisible();
         }
       });
+    });
+  });
+
+  describe('when a player draws a card', () => {
+    it('calls the drawCard function', async () => {
+      const user = userEvent.setup();
+      const drawCardSpy = jest.fn();
+      const card: Card = { value: 1, suit: Suit.Hearts };
+      const myProps: GameProps = {
+        ...defaultProps,
+        tableau: [[], [], [], [], [], [], [], [], [], [], [card], [], [], []],
+        drawCard: drawCardSpy
+      };
+      render(<Game {...myProps} />);
+
+      const tableauSection = screen.getByTestId('tableau');
+      const tableauPiles = within(tableauSection).getAllByRole('button');
+      const stockPile = tableauPiles[10];
+
+      await user.click(stockPile);
+      expect(drawCardSpy).toHaveBeenCalled();
     });
   });
 

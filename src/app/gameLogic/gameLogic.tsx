@@ -1,84 +1,100 @@
+'use client';
+import { useEffect, useState } from 'react';
+
 import { Card } from '../cardContent/cardContent';
 import Game from '../game/game';
-
-export const buildDeck = () => {
-  const buildingDeck: Card[] = [];
-  const shuffleDeck = (myDeck: Card[]): Card[] => {
-    const deck = myDeck;
-    for (let i = deck.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [deck[i], deck[j]] = [deck[j], deck[i]];
-    }
-    return deck;
-  };
-
-  for (let i = 1; i < 14; i++) {
-    for (let j = 0; j < 4; j++) {
-      buildingDeck.push({
-        value: i,
-        suit: j
-      });
-      buildingDeck.push({
-        value: i,
-        suit: j
-      });
-    }
-  }
-  return shuffleDeck(buildingDeck);
-};
-
-const dealNewGame = (): Card[][] => {
-  const deck: Card[] = buildDeck();
-  const newTableau: Card[][] = [[], [], [], [], [], [], [], [], [], [], [], [], [], []];
-
-  let newTableauIndex = 0;
-  while (deck.length > 0) {
-    const originalCardDealt = deck.pop();
-    if (originalCardDealt) {
-      newTableau[newTableauIndex].push(originalCardDealt);
-
-      if (newTableauIndex === 6 || newTableauIndex === 13) {
-        const endOfRowCard = deck.pop();
-        if (!endOfRowCard) {
-          break;
-        }
-        newTableau[10].push(endOfRowCard);
-      }
-
-      if (newTableauIndex != 10 && originalCardDealt.value === 1) {
-        const aceCard = deck.pop();
-        if (!aceCard) {
-          break;
-        }
-        newTableau[10].push(aceCard);
-      }
-
-      if (
-        newTableauIndex != 10 &&
-        ((originalCardDealt.value < 11 && originalCardDealt.value === newTableauIndex + 1) ||
-          (originalCardDealt.value > 10 && originalCardDealt.value === newTableauIndex))
-      ) {
-        const matchingCard = deck.pop();
-        if (!matchingCard) {
-          break;
-        }
-        newTableau[10].push(matchingCard);
-      }
-
-      if (newTableauIndex > 12) {
-        newTableauIndex = 0;
-      } else {
-        newTableauIndex++;
-      }
-    }
-  }
-
-  return newTableau;
-};
+import { BuildDeckService } from '../services/buildDeck/buildDeck.service';
 
 export default function GameLogic() {
   const foundations: Card[][] = [[], [], [], [], [], [], [], []];
-  const tableau: Card[][] = dealNewGame();
+  const [tableau, setTableau] = useState<Card[][]>([
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    []
+  ]);
+  const [hand, setHand] = useState<Card[]>([]);
 
-  return <Game foundations={foundations} tableau={tableau} />;
+  const dealNewGame = (): Card[][] => {
+    const deck: Card[] = BuildDeckService.buildDeck();
+    const newTableau: Card[][] = [[], [], [], [], [], [], [], [], [], [], [], [], [], []];
+
+    let newTableauIndex = 0;
+    while (deck.length > 0) {
+      const originalCardDealt = deck.pop();
+      if (originalCardDealt) {
+        newTableau[newTableauIndex].push(originalCardDealt);
+
+        if (newTableauIndex === 6 || newTableauIndex === 13) {
+          const endOfRowCard = deck.pop();
+          if (!endOfRowCard) {
+            break;
+          }
+          newTableau[10].push(endOfRowCard);
+        }
+
+        if (newTableauIndex != 10 && originalCardDealt.value === 1) {
+          const aceCard = deck.pop();
+          if (!aceCard) {
+            break;
+          }
+          newTableau[10].push(aceCard);
+        }
+
+        if (
+          newTableauIndex != 10 &&
+          ((originalCardDealt.value < 11 && originalCardDealt.value === newTableauIndex + 1) ||
+            (originalCardDealt.value > 10 && originalCardDealt.value === newTableauIndex))
+        ) {
+          const matchingCard = deck.pop();
+          if (!matchingCard) {
+            break;
+          }
+          newTableau[10].push(matchingCard);
+        }
+
+        if (newTableauIndex > 12) {
+          newTableauIndex = 0;
+        } else {
+          newTableauIndex++;
+        }
+      }
+    }
+
+    return newTableau;
+  };
+  const drawCard = () => {
+    if (hand.length > 0) {
+      return;
+    }
+    const stockPile = tableau[10].map((card) => card);
+    const drawnCard = stockPile.pop();
+
+    if (drawnCard) {
+      const newTableau = tableau.map((pile, index) => {
+        if (index === 10) {
+          return stockPile;
+        }
+        return tableau[index];
+      });
+      setTableau(newTableau);
+      setHand([drawnCard]);
+    }
+  };
+
+  useEffect(() => {
+    setTableau(dealNewGame());
+  }, []);
+
+  return <Game drawCard={drawCard} foundations={foundations} tableau={tableau} hand={hand} />;
 }
