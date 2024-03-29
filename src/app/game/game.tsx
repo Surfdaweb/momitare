@@ -1,5 +1,5 @@
 'use client';
-import CardContent, { Card } from '../cardContent/cardContent';
+import { Card } from '../cardContent/cardContent';
 import CardPile from '../cardPile/cardPile';
 import styles from './game.module.scss';
 
@@ -60,9 +60,18 @@ export default function Game({ drawCard, foundations, tableau, hand }: GameProps
             );
           })}
         </div>
-        <div data-testid="hand">
+        <div data-testid="hand" className={styles.hand}>
           {hand.length > 0 &&
-            hand.map((card, index) => <CardContent key={index} card={card}></CardContent>)}
+            hand.map((card, index) => (
+              <CardPile
+                isFaceUp={true}
+                name={`Hand ${index + 1}`}
+                handleCardPileInteract={() => {}}
+                key={index}
+                cards={[card]}
+                label=""
+              ></CardPile>
+            ))}
         </div>
       </div>
     </>
