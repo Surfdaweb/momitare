@@ -5,12 +5,21 @@ import styles from './game.module.scss';
 
 export type GameProps = {
   drawCard: () => void;
+  drawnCard: Card | undefined;
   foundations: Card[][];
   hand: Card[];
+  openPile: () => void;
   tableau: Card[][];
 };
 
-export default function Game({ drawCard, foundations, tableau, hand }: GameProps) {
+export default function Game({
+  drawCard,
+  drawnCard,
+  foundations,
+  hand,
+  openPile,
+  tableau
+}: GameProps) {
   return (
     <>
       <div className={styles.gameContainer}>
@@ -35,6 +44,14 @@ export default function Game({ drawCard, foundations, tableau, hand }: GameProps
           {tableau.map((cards, index) => {
             let label = `${index + 1}`;
             let handleCardPileInteract = () => {};
+            if (
+              drawnCard &&
+              ((index + 1 === drawnCard.value && index < 10) ||
+                (index === drawnCard.value && index > 10))
+            ) {
+              handleCardPileInteract = openPile;
+            }
+
             if (index === 0) {
               label = 'A';
             } else if (index === 10) {

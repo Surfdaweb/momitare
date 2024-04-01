@@ -24,6 +24,7 @@ export default function GameLogic() {
     []
   ]);
   const [hand, setHand] = useState<Card[]>([]);
+  const [drawnCard, setDrawnCard] = useState<Card>();
 
   const dealNewGame = (): Card[][] => {
     const deck: Card[] = BuildDeckService.buildDeck();
@@ -89,12 +90,25 @@ export default function GameLogic() {
       });
       setTableau(newTableau);
       setHand([drawnCard]);
+      setDrawnCard(drawnCard);
     }
+  };
+  const openPile = () => {
+    console.log(drawnCard);
   };
 
   useEffect(() => {
     setTableau(dealNewGame());
   }, []);
 
-  return <Game drawCard={drawCard} foundations={foundations} tableau={tableau} hand={hand} />;
+  return (
+    <Game
+      drawCard={drawCard}
+      drawnCard={drawnCard}
+      foundations={foundations}
+      hand={hand}
+      openPile={openPile}
+      tableau={tableau}
+    />
+  );
 }
