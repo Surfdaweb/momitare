@@ -243,8 +243,20 @@ describe('GameLogic', () => {
         expect(within(cardsInHand[6]).getByText('3')).toBeVisible();
         expect(within(cardsInHand[6]).getByAltText('of Hearts')).toBeVisible();
       });
-      it.todo('removes the cards from the tableau pile');
-      it.todo('does not allow unrelated piles to be opened');
+      it('removes the cards from the tableau pile', async () => {
+        const user = userEvent.setup();
+        render(<GameLogic />);
+
+        const tableauSection = screen.getByTestId('tableau');
+        const tableauPiles = within(tableauSection).getAllByRole('button');
+        const stockPile = tableauPiles[10];
+
+        await user.click(stockPile);
+        await user.click(tableauPiles[0]);
+
+        expect(within(tableauPiles[0]).getByText('A')).toBeVisible();
+        expect(within(tableauPiles[0]).queryByAltText('of Hearts')).not.toBeInTheDocument();
+      });
     });
   });
 });

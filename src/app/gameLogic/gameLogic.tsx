@@ -88,13 +88,35 @@ export default function GameLogic() {
         }
         return tableau[index];
       });
+
       setTableau(newTableau);
       setHand([drawnCard]);
       setDrawnCard(drawnCard);
     }
   };
   const openPile = () => {
-    console.log(drawnCard);
+    if (!drawnCard) {
+      return;
+    }
+
+    let tableauIndex = drawnCard.value - 1;
+    if (drawnCard.value > 10) {
+      tableauIndex++;
+    }
+
+    const pileToOpen = tableau[tableauIndex];
+    const newHand = hand.map((card) => card);
+    pileToOpen.forEach((card) => newHand.push(card));
+
+    const newTableau = tableau.map((pile, index) => {
+      if (index === tableauIndex) {
+        return [];
+      }
+      return pile;
+    });
+
+    setHand(newHand);
+    setTableau(newTableau);
   };
 
   useEffect(() => {
