@@ -69,7 +69,7 @@ describe('GameLogic', () => {
       { value: 7, suit: Suit.Spades }, // 2
       { value: 7, suit: Suit.Spades }, // A
       { value: 7, suit: Suit.Diamonds }, // S
-      { value: 7, suit: Suit.Diamonds }, //K
+      { value: 7, suit: Suit.Diamonds }, // K
       { value: 7, suit: Suit.Clubs }, // Q
       { value: 7, suit: Suit.Clubs }, // J
 
@@ -203,6 +203,59 @@ describe('GameLogic', () => {
         const hand = screen.getByTestId('hand');
         expect(within(hand).getByText('A')).toBeVisible();
         expect(within(hand).getByAltText('of Hearts')).toBeVisible();
+      });
+    });
+
+    describe('when a pile is opened', () => {
+      it('shows the cards from the correct tableau pile', async () => {
+        const user = userEvent.setup();
+        render(<GameLogic />);
+
+        const tableauSection = screen.getByTestId('tableau');
+        const tableauPiles = within(tableauSection).getAllByRole('button');
+        const stockPile = tableauPiles[10];
+
+        await user.click(stockPile);
+        await user.click(tableauPiles[0]);
+
+        const hand = screen.getByTestId('hand');
+        const cardsInHand = within(hand).getAllByRole('button');
+        expect(cardsInHand.length).toEqual(7);
+
+        expect(within(cardsInHand[0]).getByText('A')).toBeVisible();
+        expect(within(cardsInHand[0]).getByAltText('of Hearts')).toBeVisible();
+
+        expect(within(cardsInHand[1]).getByText('A')).toBeVisible();
+        expect(within(cardsInHand[1]).getByAltText('of Hearts')).toBeVisible();
+
+        expect(within(cardsInHand[2]).getByText('J')).toBeVisible();
+        expect(within(cardsInHand[2]).getByAltText('of Diamonds')).toBeVisible();
+
+        expect(within(cardsInHand[3]).getByText('9')).toBeVisible();
+        expect(within(cardsInHand[3]).getByAltText('of Diamonds')).toBeVisible();
+
+        expect(within(cardsInHand[4]).getByText('7')).toBeVisible();
+        expect(within(cardsInHand[4]).getByAltText('of Spades')).toBeVisible();
+
+        expect(within(cardsInHand[5]).getByText('5')).toBeVisible();
+        expect(within(cardsInHand[5]).getByAltText('of Spades')).toBeVisible();
+
+        expect(within(cardsInHand[6]).getByText('3')).toBeVisible();
+        expect(within(cardsInHand[6]).getByAltText('of Hearts')).toBeVisible();
+      });
+      it('removes the cards from the tableau pile', async () => {
+        const user = userEvent.setup();
+        render(<GameLogic />);
+
+        const tableauSection = screen.getByTestId('tableau');
+        const tableauPiles = within(tableauSection).getAllByRole('button');
+        const stockPile = tableauPiles[10];
+
+        await user.click(stockPile);
+        await user.click(tableauPiles[0]);
+
+        expect(within(tableauPiles[0]).getByText('A')).toBeVisible();
+        expect(within(tableauPiles[0]).queryByAltText('of Hearts')).not.toBeInTheDocument();
       });
     });
   });

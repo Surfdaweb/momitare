@@ -27,7 +27,13 @@
   gap: 0.35em;
   width: 25em;
 }
+
 .hand {
+  margin-left: -1rem;
   height: 4rem;
   align-self: center;
+}
+
+.hand > button {
+  margin-right: -1rem;
 }
