@@ -12,7 +12,7 @@ const defaultProps: GameProps = {
   drawnCard: undefined,
   hand: [],
   foundations: [[], [], [], [], [], [], [], []],
-  openPile: () => {},
+  openClosePile: () => {},
   tableau: [[], [], [], [], [], [], [], [], [], [], [], [], [], []]
 };
 
@@ -111,13 +111,13 @@ describe('Game', () => {
 
     it('lets the player open a pile with a low value', async () => {
       const user = userEvent.setup();
-      const openPileSpy = jest.fn();
+      const openClosePileSpy = jest.fn();
       const card: Card = { value: 1, suit: Suit.Hearts };
       const myProps: GameProps = {
         ...defaultProps,
         drawnCard: card,
         tableau: [[card], [], [], [], [], [], [], [], [], [], [card], [], [], []],
-        openPile: openPileSpy
+        openClosePile: openClosePileSpy
       };
       render(<Game {...myProps} />);
 
@@ -125,18 +125,18 @@ describe('Game', () => {
       const tableauPiles = within(tableauSection).getAllByRole('button');
 
       await user.click(tableauPiles[0]);
-      expect(openPileSpy).toHaveBeenCalled();
+      expect(openClosePileSpy).toHaveBeenCalled();
     });
 
     it('lets the player open a pile with a high value', async () => {
       const user = userEvent.setup();
-      const openPileSpy = jest.fn();
+      const openClosePileSpy = jest.fn();
       const card: Card = { value: 11, suit: Suit.Hearts };
       const myProps: GameProps = {
         ...defaultProps,
         drawnCard: card,
         tableau: [[], [], [], [], [], [], [], [], [], [], [card], [card], [], []],
-        openPile: openPileSpy
+        openClosePile: openClosePileSpy
       };
       render(<Game {...myProps} />);
 
@@ -144,12 +144,12 @@ describe('Game', () => {
       const tableauPiles = within(tableauSection).getAllByRole('button');
 
       await user.click(tableauPiles[11]);
-      expect(openPileSpy).toHaveBeenCalled();
+      expect(openClosePileSpy).toHaveBeenCalled();
     });
 
     it('does not let the player open an unrelated pile', async () => {
       const user = userEvent.setup();
-      const openPileSpy = jest.fn();
+      const openClosePileSpy = jest.fn();
       const card: Card = { value: 11, suit: Suit.Hearts };
       const myProps: GameProps = {
         ...defaultProps,
@@ -170,7 +170,7 @@ describe('Game', () => {
           [],
           []
         ],
-        openPile: openPileSpy
+        openClosePile: openClosePileSpy
       };
       render(<Game {...myProps} />);
 
@@ -178,7 +178,29 @@ describe('Game', () => {
       const tableauPiles = within(tableauSection).getAllByRole('button');
 
       await user.click(tableauPiles[0]);
-      expect(openPileSpy).not.toHaveBeenCalled();
+      expect(openClosePileSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('when a pile is open', () => {
+    it('lets the player close the pile', async () => {
+      const user = userEvent.setup();
+      const openClosePileSpy = jest.fn();
+      const card: Card = { value: 11, suit: Suit.Hearts };
+      const myProps: GameProps = {
+        ...defaultProps,
+        drawnCard: card,
+        hand: [card, { value: 3, suit: Suit.Clubs }, { value: 3, suit: Suit.Clubs }],
+        openClosePile: openClosePileSpy,
+        tableau: [[], [], [], [], [], [], [], [], [], [], [card], [], [], []]
+      };
+      render(<Game {...myProps} />);
+
+      const tableauSection = screen.getByTestId('tableau');
+      const tableauPiles = within(tableauSection).getAllByRole('button');
+
+      await user.click(tableauPiles[11]);
+      expect(openClosePileSpy).toHaveBeenCalled();
     });
   });
 

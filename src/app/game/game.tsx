@@ -8,7 +8,7 @@ export type GameProps = {
   drawnCard: Card | undefined;
   foundations: Card[][];
   hand: Card[];
-  openPile: () => void;
+  openClosePile: () => void;
   tableau: Card[][];
 };
 
@@ -17,7 +17,7 @@ export default function Game({
   drawnCard,
   foundations,
   hand,
-  openPile,
+  openClosePile,
   tableau
 }: GameProps) {
   return (
@@ -49,7 +49,7 @@ export default function Game({
               ((index + 1 === drawnCard.value && index < 10) ||
                 (index === drawnCard.value && index > 10))
             ) {
-              handleCardPileInteract = openPile;
+              handleCardPileInteract = openClosePile;
             }
 
             if (index === 0) {

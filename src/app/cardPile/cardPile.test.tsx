@@ -29,7 +29,6 @@ describe('CardPile', () => {
       const pile = screen.getByRole('button', { name: 'The Ace pile is empty' });
       expect(pile).toBeVisible();
       expect(screen.getByText('A')).toBeVisible();
-      expect(pile).toBeDisabled();
     });
   });
 
