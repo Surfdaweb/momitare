@@ -20,7 +20,7 @@ export default function CardPile({
   if (cards.length == 0) {
     return (
       <button
-        disabled
+        onClick={() => handleCardPileInteract()}
         className={`${styles.card} ${styles.emptyPile}`}
         aria-label={`The ${name} pile is empty`}
       >

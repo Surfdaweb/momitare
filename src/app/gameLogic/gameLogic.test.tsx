@@ -257,6 +257,21 @@ describe('GameLogic', () => {
         expect(within(tableauPiles[0]).getByText('A')).toBeVisible();
         expect(within(tableauPiles[0]).queryByAltText('of Hearts')).not.toBeInTheDocument();
       });
+      it('can be closed', async () => {
+        const user = userEvent.setup();
+        render(<GameLogic />);
+
+        const tableauSection = screen.getByTestId('tableau');
+        const tableauPiles = within(tableauSection).getAllByRole('button');
+        const stockPile = tableauPiles[10];
+
+        await user.click(stockPile);
+        await user.click(tableauPiles[0]);
+        await user.click(tableauPiles[0]);
+
+        expect(within(tableauPiles[0]).getByText('3')).toBeVisible();
+        expect(within(tableauPiles[0]).getByAltText('of Hearts')).toBeVisible();
+      });
     });
   });
 });

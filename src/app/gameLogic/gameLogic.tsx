@@ -94,7 +94,7 @@ export default function GameLogic() {
       setDrawnCard(drawnCard);
     }
   };
-  const openPile = () => {
+  const openClosePile = () => {
     if (!drawnCard) {
       return;
     }
@@ -105,15 +105,28 @@ export default function GameLogic() {
     }
 
     const pileToOpen = tableau[tableauIndex];
-    const newHand = hand.map((card) => card);
-    pileToOpen.forEach((card) => newHand.push(card));
+    let newHand: Card[];
+    let newTableau: Card[][];
 
-    const newTableau = tableau.map((pile, index) => {
-      if (index === tableauIndex) {
-        return [];
-      }
-      return pile;
-    });
+    if (pileToOpen.length > 0) {
+      newHand = hand.map((card) => card);
+      pileToOpen.forEach((card) => newHand.push(card));
+
+      newTableau = tableau.map((pile, index) => {
+        if (index === tableauIndex) {
+          return [];
+        }
+        return pile;
+      });
+    } else {
+      newHand = [];
+      newTableau = tableau.map((pile, index) => {
+        if (index === tableauIndex) {
+          return hand;
+        }
+        return pile;
+      });
+    }
 
     setHand(newHand);
     setTableau(newTableau);
@@ -129,7 +142,7 @@ export default function GameLogic() {
       drawnCard={drawnCard}
       foundations={foundations}
       hand={hand}
-      openPile={openPile}
+      openClosePile={openClosePile}
       tableau={tableau}
     />
   );
