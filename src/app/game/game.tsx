@@ -1,4 +1,6 @@
 'use client';
+import { useState } from 'react';
+
 import { Card } from '../cardContent/cardContent';
 import CardPile from '../cardPile/cardPile';
 import styles from './game.module.scss';
@@ -20,6 +22,43 @@ export default function Game({
   openClosePile,
   tableau
 }: GameProps) {
+  const [touchStartX, setTouchStartX] = useState(0);
+  const [touchStartY, setTouchStartY] = useState(0);
+  const [selectedCard, setSelectedCard] = useState(hand.length - 1);
+
+  const minSwipeDistance = 20;
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStartX(e.targetTouches[0].clientX);
+    setTouchStartY(e.targetTouches[0].clientY);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    const xDistance = touchStartX - e.targetTouches[0].clientX;
+    const yDistance = touchStartY - e.targetTouches[0].clientY;
+    if (Math.abs(yDistance) >= Math.abs(xDistance)) {
+      return;
+    }
+
+    if (xDistance > minSwipeDistance) {
+      console.log('left');
+      if (selectedCard > 0) {
+        setSelectedCard(selectedCard - 1);
+      }
+      setTouchStartX(e.targetTouches[0].clientX);
+      setTouchStartY(e.targetTouches[0].clientY);
+    }
+
+    if (xDistance < -minSwipeDistance) {
+      console.log('right');
+      if (selectedCard < hand.length - 1) {
+        setSelectedCard(selectedCard + 1);
+      }
+      setTouchStartX(e.targetTouches[0].clientX);
+      setTouchStartY(e.targetTouches[0].clientY);
+    }
+  };
+
   return (
     <>
       <div className={styles.gameContainer}>
@@ -77,12 +116,18 @@ export default function Game({
             );
           })}
         </div>
-        <div data-testid="hand" className={styles.hand}>
+        <div
+          data-testid="hand"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          className={styles.hand}
+        >
           {hand.length > 0 &&
             hand.map((card, index) => (
               <CardPile
                 isFaceUp={true}
                 name={`Hand ${index + 1}`}
+                extraClass={index === selectedCard ? styles.selected : ''}
                 handleCardPileInteract={() => {}}
                 key={index}
                 cards={[card]}
