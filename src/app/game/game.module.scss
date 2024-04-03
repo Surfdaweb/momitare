@@ -12,7 +12,6 @@
   align-self: center;
   flex-flow: row wrap;
   display: flex;
-  flex-direction: row;
   justify-content: center;
   gap: 0.5em;
   width: 15em;
@@ -22,18 +21,47 @@
   align-self: center;
   flex-flow: row wrap;
   display: flex;
-  flex-direction: row;
   justify-content: center;
   gap: 0.35em;
   width: 25em;
 }
 
 .hand {
-  margin-left: -1rem;
-  height: 4rem;
+  width: 150%;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+  display: flex;
+  flex-flow: row nowrap;
   align-self: center;
+  justify-content: center;
+  padding: 1rem;
+  height: 5rem;
+}
+.hand::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
 }
 
 .hand > button {
-  margin-right: -1rem;
+  margin-right: -0.5rem;
+  margin-left: -0.5rem;
+}
+
+.hand > .selected,
+.hand > button:hover {
+  animation-duration: 0.2s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+  animation-name: showHandCard;
+  margin-right: 0.4rem;
+  margin-left: 0.4rem;
+}
+@keyframes showHandCard {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-1rem);
+  }
 }

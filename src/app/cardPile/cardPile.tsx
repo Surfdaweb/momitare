@@ -4,6 +4,7 @@ import styles from './cardPile.module.scss';
 
 export interface CardPileProps {
   cards?: Card[];
+  extraClass?: string;
   handleCardPileInteract: () => void;
   isFaceUp?: boolean;
   label: string;
@@ -12,6 +13,7 @@ export interface CardPileProps {
 
 export default function CardPile({
   cards = [],
+  extraClass = '',
   isFaceUp = false,
   name,
   label = '',
@@ -34,6 +36,7 @@ export default function CardPile({
       onClick={() => handleCardPileInteract()}
       className={`${styles.card} 
         ${isFaceUp ? styles.faceUpCard : styles.faceDownCard}
+        ${extraClass}
       `}
     >
       {isFaceUp && <CardContent card={cards[cards.length - 1]} />}
