@@ -48,14 +48,26 @@
   margin-left: -0.5rem;
 }
 
-.hand > .selected,
-.hand > button:hover {
-  animation-duration: 0.2s;
-  animation-fill-mode: forwards;
-  animation-iteration-count: 1;
-  animation-name: showHandCard;
-  margin-right: 0.4rem;
-  margin-left: 0.4rem;
+@media (hover: hover) {
+  .hand > button:hover {
+    animation-duration: 0.2s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-name: showHandCard;
+    margin-right: 0.4rem;
+    margin-left: 0.4rem;
+  }
+}
+
+@media (hover: none) {
+  .hand > .selected {
+    animation-duration: 0.2s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-name: showHandCard;
+    margin-right: 0.4rem;
+    margin-left: 0.4rem;
+  }
 }
 @keyframes showHandCard {
   0% {
