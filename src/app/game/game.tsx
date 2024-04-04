@@ -41,7 +41,6 @@ export default function Game({
     }
 
     if (xDistance > minSwipeDistance) {
-      console.log('left');
       if (selectedCard > 0) {
         setSelectedCard(selectedCard - 1);
       }
@@ -50,7 +49,6 @@ export default function Game({
     }
 
     if (xDistance < -minSwipeDistance) {
-      console.log('right');
       if (selectedCard < hand.length - 1) {
         setSelectedCard(selectedCard + 1);
       }
