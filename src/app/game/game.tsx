@@ -6,6 +6,7 @@ import CardPile from '../cardPile/cardPile';
 import styles from './game.module.scss';
 
 export type GameProps = {
+  addCardToFoundation: (card: Card) => void;
   drawCard: () => void;
   drawnCard: Card | undefined;
   foundations: Card[][];
@@ -15,6 +16,7 @@ export type GameProps = {
 };
 
 export default function Game({
+  addCardToFoundation,
   drawCard,
   drawnCard,
   foundations,
@@ -69,6 +71,7 @@ export default function Game({
             return (
               <CardPile
                 handleCardPileInteract={() => {}}
+                isFaceUp={true}
                 key={index}
                 name={`Foundation ${index}`}
                 cards={cards}
@@ -126,7 +129,7 @@ export default function Game({
                 isFaceUp={true}
                 name={`Hand ${index + 1}`}
                 extraClass={index === selectedCard ? styles.selected : ''}
-                handleCardPileInteract={() => {}}
+                handleCardPileInteract={() => addCardToFoundation(card)}
                 key={index}
                 cards={[card]}
                 label=""

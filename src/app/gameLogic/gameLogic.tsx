@@ -6,7 +6,7 @@ import Game from '../game/game';
 import { BuildDeckService } from '../services/buildDeck/buildDeck.service';
 
 export default function GameLogic() {
-  const foundations: Card[][] = [[], [], [], [], [], [], [], []];
+  const [foundations, setFoundations] = useState<Card[][]>([[], [], [], [], [], [], [], []]);
   const [tableau, setTableau] = useState<Card[][]>([
     [],
     [],
@@ -131,6 +131,21 @@ export default function GameLogic() {
     setHand(newHand);
     setTableau(newTableau);
   };
+  const addCardToFoundation = (chosenCard: Card) => {
+    const newHand = hand.filter((card) => card != chosenCard);
+
+    const newFoundationPile = foundations[0].map((card) => card);
+    newFoundationPile.push(chosenCard);
+    const newFoundations = foundations.map((pile, index) => {
+      if (index === 0) {
+        return newFoundationPile;
+      }
+      return pile;
+    });
+
+    setHand(newHand);
+    setFoundations(newFoundations);
+  };
 
   useEffect(() => {
     setTableau(dealNewGame());
@@ -138,6 +153,7 @@ export default function GameLogic() {
 
   return (
     <Game
+      addCardToFoundation={addCardToFoundation}
       drawCard={drawCard}
       drawnCard={drawnCard}
       foundations={foundations}

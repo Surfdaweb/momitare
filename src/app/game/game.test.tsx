@@ -202,6 +202,25 @@ describe('Game', () => {
       await user.click(tableauPiles[11]);
       expect(openClosePileSpy).toHaveBeenCalled();
     });
+    it('lets a player click a card to add it to the foundation pile', async () => {
+      const user = userEvent.setup();
+      const addCardToFoundationSpy = jest.fn();
+      const card: Card = { value: 11, suit: Suit.Hearts };
+      const myProps: GameProps = {
+        ...defaultProps,
+        addCardToFoundation: addCardToFoundationSpy,
+        drawnCard: card,
+        hand: [card, { value: 3, suit: Suit.Clubs }, { value: 3, suit: Suit.Clubs }]
+      };
+      render(<Game {...myProps} />);
+
+      const handSection = screen.getByTestId('hand');
+      const handCards = within(handSection).getAllByRole('button');
+
+      await user.click(handCards[0]);
+      expect(addCardToFoundationSpy).toHaveBeenCalled();
+      expect(addCardToFoundationSpy).toHaveBeenCalledWith(card);
+    });
   });
 
   describe('when there are no cards in the tableau', () => {
