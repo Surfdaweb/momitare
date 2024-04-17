@@ -135,6 +135,10 @@ export default function GameLogic() {
   };
 
   const addCardToFoundation = (chosenCard: Card, tableauIndex: number = -1) => {
+    const indexToPlaceCard = determineFoundationPlacement(chosenCard);
+    if (indexToPlaceCard < 0) {
+      return;
+    }
     if (tableauIndex > -1) {
       const newTableauPile = tableau[tableauIndex].filter((card) => card != chosenCard);
       const newTableau = tableau.map((pile, index) => {
@@ -149,16 +153,59 @@ export default function GameLogic() {
       setHand(newHand);
     }
 
-    const newFoundationPile = foundations[0].map((card) => card);
+    const newFoundationPile = foundations[indexToPlaceCard].map((card) => card);
     newFoundationPile.push(chosenCard);
     const newFoundations = foundations.map((pile, index) => {
-      if (index === 0) {
+      if (index === indexToPlaceCard) {
         return newFoundationPile;
       }
       return pile;
     });
 
     setFoundations(newFoundations);
+  };
+
+  const determineFoundationPlacement = (chosenCard: Card): number => {
+    if (chosenCard.value === 1) {
+      for (let i = 0; i < 4; i++) {
+        if (foundations[i].length === 0) {
+          return i;
+        }
+        if (foundations[i][0].suit === chosenCard.suit) {
+          break;
+        }
+      }
+    }
+
+    if (chosenCard.value === 13) {
+      for (let i = 4; i < 8; i++) {
+        if (foundations[i].length === 0) {
+          return i;
+        }
+        if (foundations[i][0].suit === chosenCard.suit) {
+          break;
+        }
+      }
+    }
+
+    let correctIndex = -1;
+    foundations.forEach((pile, index) => {
+      if (pile.length === 0) {
+        return;
+      }
+      const pileCard = pile[pile.length - 1];
+      if (pileCard.suit != chosenCard.suit) {
+        return;
+      }
+      if (index < 4 && pileCard.value === chosenCard.value - 1) {
+        correctIndex = index;
+      }
+      if (index > 3 && pileCard.value === chosenCard.value + 1) {
+        correctIndex = index;
+      }
+    });
+
+    return correctIndex;
   };
 
   useEffect(() => {
