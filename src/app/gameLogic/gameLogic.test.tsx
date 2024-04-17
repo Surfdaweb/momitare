@@ -292,14 +292,65 @@ describe('GameLogic', () => {
 
           const foundationSection = screen.getByTestId('foundations');
           const foundations = within(foundationSection).getAllByRole('button');
-          const afterHand = screen.getByTestId('hand');
-          const afterCardsInHand = within(afterHand).getAllByRole('button');
 
           expect(within(foundations[0]).getByText('A')).toBeVisible();
           expect(within(foundations[0]).getByAltText('of Hearts')).toBeVisible();
+        });
+        it('removes the card from the hand', async () => {
+          const user = userEvent.setup();
+          render(<GameLogic />);
+
+          const tableauSection = screen.getByTestId('tableau');
+          const tableauPiles = within(tableauSection).getAllByRole('button');
+          const stockPile = tableauPiles[10];
+
+          await user.click(stockPile);
+          await user.click(tableauPiles[0]);
+
+          const hand = screen.getByTestId('hand');
+          const cardsInHand = within(hand).getAllByRole('button');
+          const cardToPlace = cardsInHand[0];
+
+          await user.click(cardToPlace);
+
+          const afterHand = screen.getByTestId('hand');
+          const afterCardsInHand = within(afterHand).getAllByRole('button');
 
           expect(afterCardsInHand.length).toEqual(6);
         });
+      });
+    });
+
+    describe('when a tableau pile is clicked', () => {
+      it('adds the top card to a foundation pile', async () => {
+        const user = userEvent.setup();
+        render(<GameLogic />);
+
+        const tableauSection = screen.getByTestId('tableau');
+        const tableauPiles = within(tableauSection).getAllByRole('button');
+
+        await user.click(tableauPiles[12]);
+
+        const foundationSection = screen.getByTestId('foundations');
+        const foundations = within(foundationSection).getAllByRole('button');
+
+        expect(within(foundations[0]).getByText('A')).toBeVisible();
+        expect(within(foundations[0]).getByAltText('of Spades')).toBeVisible();
+      });
+      it('shows the next card in the pile', async () => {
+        const user = userEvent.setup();
+        render(<GameLogic />);
+
+        const tableauSection = screen.getByTestId('tableau');
+        const tableauPiles = within(tableauSection).getAllByRole('button');
+
+        await user.click(tableauPiles[12]);
+
+        const afterTableauSection = screen.getByTestId('tableau');
+        const afterTableauPiles = within(afterTableauSection).getAllByRole('button');
+
+        expect(within(afterTableauPiles[12]).getByText('3')).toBeVisible();
+        expect(within(afterTableauPiles[12]).getByAltText('of Diamonds')).toBeVisible();
       });
     });
   });

@@ -8,6 +8,7 @@ import { Card, Suit } from '../cardContent/cardContent';
 import Game, { GameProps } from './game';
 
 const defaultProps: GameProps = {
+  addCardToFoundation: () => {},
   drawCard: () => {},
   drawnCard: undefined,
   hand: [],
@@ -179,6 +180,43 @@ describe('Game', () => {
 
       await user.click(tableauPiles[0]);
       expect(openClosePileSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('when a player clicks a tableau pile', () => {
+    it('lets a player click a card to add it to the foundation pile', async () => {
+      const user = userEvent.setup();
+      const addCardToFoundationSpy = jest.fn();
+      const card: Card = { value: 11, suit: Suit.Hearts };
+      const myProps: GameProps = {
+        ...defaultProps,
+        addCardToFoundation: addCardToFoundationSpy,
+        drawnCard: card,
+        tableau: [
+          [{ value: 3, suit: Suit.Spades }, card],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [{ value: 5, suit: Suit.Spades }],
+          [{ value: 4, suit: Suit.Spades }],
+          [],
+          []
+        ]
+      };
+      render(<Game {...myProps} />);
+
+      const tableauSection = screen.getByTestId('tableau');
+      const tableauPiles = within(tableauSection).getAllByRole('button');
+
+      await user.click(tableauPiles[0]);
+      expect(addCardToFoundationSpy).toHaveBeenCalled();
+      expect(addCardToFoundationSpy).toHaveBeenCalledWith(card, 0);
     });
   });
 

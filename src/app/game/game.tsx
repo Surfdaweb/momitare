@@ -6,7 +6,7 @@ import CardPile from '../cardPile/cardPile';
 import styles from './game.module.scss';
 
 export type GameProps = {
-  addCardToFoundation: (card: Card) => void;
+  addCardToFoundation: (card: Card, tableauIndex?: number) => void;
   drawCard: () => void;
   drawnCard: Card | undefined;
   foundations: Card[][];
@@ -90,6 +90,10 @@ export default function Game({
                 (index === drawnCard.value && index > 10))
             ) {
               handleCardPileInteract = openClosePile;
+            } else {
+              handleCardPileInteract = () => {
+                addCardToFoundation(cards[cards.length - 1], index);
+              };
             }
 
             if (index === 0) {
