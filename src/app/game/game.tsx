@@ -91,9 +91,11 @@ export default function Game({
             ) {
               handleCardPileInteract = openClosePile;
             } else {
-              handleCardPileInteract = () => {
-                addCardToFoundation(cards[cards.length - 1], index);
-              };
+              if (cards.length > 0) {
+                handleCardPileInteract = () => {
+                  addCardToFoundation(cards[cards.length - 1], index);
+                };
+              }
             }
 
             if (index === 0) {

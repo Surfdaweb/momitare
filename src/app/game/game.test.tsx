@@ -218,6 +218,40 @@ describe('Game', () => {
       expect(addCardToFoundationSpy).toHaveBeenCalled();
       expect(addCardToFoundationSpy).toHaveBeenCalledWith(card, 0);
     });
+
+    it('does not let a player add cards from a tableau pile that is empty', async () => {
+      const user = userEvent.setup();
+      const addCardToFoundationSpy = jest.fn();
+      const card: Card = { value: 11, suit: Suit.Hearts };
+      const myProps: GameProps = {
+        ...defaultProps,
+        addCardToFoundation: addCardToFoundationSpy,
+        drawnCard: card,
+        tableau: [
+          [{ value: 3, suit: Suit.Spades }, card],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [{ value: 5, suit: Suit.Spades }],
+          [{ value: 4, suit: Suit.Spades }],
+          [],
+          []
+        ]
+      };
+      render(<Game {...myProps} />);
+
+      const tableauSection = screen.getByTestId('tableau');
+      const tableauPiles = within(tableauSection).getAllByRole('button');
+
+      await user.click(tableauPiles[1]);
+      expect(addCardToFoundationSpy).not.toHaveBeenCalled();
+    });
   });
 
   describe('when a pile is open', () => {
