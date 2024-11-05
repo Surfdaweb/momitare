@@ -184,7 +184,7 @@ describe('Game', () => {
   });
 
   describe('when a player clicks a tableau pile', () => {
-    it('lets a player click a card to add it to the foundation pile', async () => {
+    it('lets a player click a card & its destination to add it to the foundation pile', async () => {
       const user = userEvent.setup();
       const addCardToFoundationSpy = jest.fn();
       const card: Card = { value: 11, suit: Suit.Hearts };
@@ -213,10 +213,15 @@ describe('Game', () => {
 
       const tableauSection = screen.getByTestId('tableau');
       const tableauPiles = within(tableauSection).getAllByRole('button');
+      const foundationSection = screen.getByTestId('foundations');
+      const foundationPiles = within(foundationSection).getAllByRole('button');
 
       await user.click(tableauPiles[0]);
+      expect(addCardToFoundationSpy).not.toHaveBeenCalled();
+
+      await user.click(foundationPiles[1]);
       expect(addCardToFoundationSpy).toHaveBeenCalled();
-      expect(addCardToFoundationSpy).toHaveBeenCalledWith(card, 0);
+      expect(addCardToFoundationSpy).toHaveBeenCalledWith(card, 1, 0);
     });
 
     it('does not let a player add cards from a tableau pile that is empty', async () => {
@@ -274,7 +279,7 @@ describe('Game', () => {
       await user.click(tableauPiles[11]);
       expect(openClosePileSpy).toHaveBeenCalled();
     });
-    it('lets a player click a card to add it to the foundation pile', async () => {
+    it('lets a player click a card & then a foundation pile to add it to the foundation pile', async () => {
       const user = userEvent.setup();
       const addCardToFoundationSpy = jest.fn();
       const card: Card = { value: 11, suit: Suit.Hearts };
@@ -288,10 +293,15 @@ describe('Game', () => {
 
       const handSection = screen.getByTestId('hand');
       const handCards = within(handSection).getAllByRole('button');
+      const foundationSection = screen.getByTestId('foundations');
+      const foundationPiles = within(foundationSection).getAllByRole('button');
 
       await user.click(handCards[0]);
+      expect(addCardToFoundationSpy).not.toHaveBeenCalled();
+
+      await user.click(foundationPiles[1]);
       expect(addCardToFoundationSpy).toHaveBeenCalled();
-      expect(addCardToFoundationSpy).toHaveBeenCalledWith(card);
+      expect(addCardToFoundationSpy).toHaveBeenCalledWith(card, 1, -1);
     });
   });
 

@@ -134,9 +134,12 @@ export default function GameLogic() {
     setTableau(newTableau);
   };
 
-  const addCardToFoundation = (chosenCard: Card, tableauIndex: number = -1) => {
-    const indexToPlaceCard = determineFoundationPlacement(chosenCard);
-    if (indexToPlaceCard < 0) {
+  const addCardToFoundation = (
+    chosenCard: Card,
+    foundationIndex: number,
+    tableauIndex: number = -1
+  ) => {
+    if (!ableToPlaceCard(chosenCard, foundationIndex)) {
       return;
     }
     if (tableauIndex > -1) {
@@ -153,10 +156,10 @@ export default function GameLogic() {
       setHand(newHand);
     }
 
-    const newFoundationPile = foundations[indexToPlaceCard].map((card) => card);
+    const newFoundationPile = foundations[foundationIndex].map((card) => card);
     newFoundationPile.push(chosenCard);
     const newFoundations = foundations.map((pile, index) => {
-      if (index === indexToPlaceCard) {
+      if (index === foundationIndex) {
         return newFoundationPile;
       }
       return pile;
@@ -165,47 +168,43 @@ export default function GameLogic() {
     setFoundations(newFoundations);
   };
 
-  const determineFoundationPlacement = (chosenCard: Card): number => {
-    if (chosenCard.value === 1) {
+  const ableToPlaceCard = (chosenCard: Card, foundationIndex: number): boolean => {
+    const foundationPile = foundations[foundationIndex];
+
+    if (foundationPile.length === 0 && foundationIndex < 4 && chosenCard.value === 1) {
       for (let i = 0; i < 4; i++) {
-        if (foundations[i].length === 0) {
-          return i;
-        }
-        if (foundations[i][0].suit === chosenCard.suit) {
-          break;
+        if (foundations[i].length > 0 && foundations[i][0].suit === chosenCard.suit) {
+          return false;
         }
       }
+      return true;
     }
 
-    if (chosenCard.value === 13) {
+    if (foundationPile.length === 0 && foundationIndex > 3 && chosenCard.value === 13) {
       for (let i = 4; i < 8; i++) {
-        if (foundations[i].length === 0) {
-          return i;
-        }
-        if (foundations[i][0].suit === chosenCard.suit) {
-          break;
+        if (foundations[i].length > 0 && foundations[i][0].suit === chosenCard.suit) {
+          return false;
         }
       }
+      return true;
     }
 
-    let correctIndex = -1;
-    foundations.forEach((pile, index) => {
-      if (pile.length === 0) {
-        return;
-      }
-      const pileCard = pile[pile.length - 1];
-      if (pileCard.suit != chosenCard.suit) {
-        return;
-      }
-      if (index < 4 && pileCard.value === chosenCard.value - 1) {
-        correctIndex = index;
-      }
-      if (index > 3 && pileCard.value === chosenCard.value + 1) {
-        correctIndex = index;
-      }
-    });
+    if (foundationPile.length === 0) {
+      return false;
+    }
 
-    return correctIndex;
+    const pileCard = foundationPile[foundationPile.length - 1];
+    if (pileCard.suit != chosenCard.suit) {
+      return false;
+    }
+    if (foundationIndex < 4 && pileCard.value === chosenCard.value - 1) {
+      return true;
+    }
+    if (foundationIndex > 3 && pileCard.value === chosenCard.value + 1) {
+      return true;
+    }
+
+    return false;
   };
 
   useEffect(() => {
