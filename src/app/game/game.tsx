@@ -75,6 +75,7 @@ export default function Game({
         tableauIndex = selectedCard.index;
       }
       addCardToFoundation(selectedCard.card, foundationIndex, tableauIndex);
+      setSelectedCard(undefined);
     }
   };
 
@@ -137,7 +138,7 @@ export default function Game({
                 name={`Tableau ${index + 1}`}
                 extraClass={
                   selectedCard && selectedCard.isTableau && index === selectedCard.index
-                    ? styles.selected
+                    ? styles.selectedCard
                     : ''
                 }
                 isFaceUp={label === 'S' ? false : true}
@@ -160,7 +161,7 @@ export default function Game({
                 name={`Hand ${index + 1}`}
                 extraClass={
                   selectedCard && !selectedCard.isTableau && index === selectedCard.index
-                    ? styles.selected
+                    ? `${styles.selected} ${styles.selectedCard}`
                     : ''
                 }
                 handleCardPileInteract={() =>
