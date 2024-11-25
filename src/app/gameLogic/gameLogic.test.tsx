@@ -272,7 +272,7 @@ describe('GameLogic', () => {
         expect(within(tableauPiles[0]).getByText('3')).toBeVisible();
         expect(within(tableauPiles[0]).getByAltText('of Hearts')).toBeVisible();
       });
-      describe('when a card is clicked', () => {
+      describe('when a card & a foundation pile is clicked', () => {
         it('adds the card to a foundation pile', async () => {
           const user = userEvent.setup();
           render(<GameLogic />);
@@ -293,6 +293,8 @@ describe('GameLogic', () => {
           const foundationSection = screen.getByTestId('foundations');
           const foundations = within(foundationSection).getAllByRole('button');
 
+          await user.click(foundations[0]);
+
           expect(within(foundations[0]).getByText('A')).toBeVisible();
           expect(within(foundations[0]).getByAltText('of Hearts')).toBeVisible();
         });
@@ -312,6 +314,11 @@ describe('GameLogic', () => {
           const cardToPlace = cardsInHand[0];
 
           await user.click(cardToPlace);
+
+          const foundationSection = screen.getByTestId('foundations');
+          const foundations = within(foundationSection).getAllByRole('button');
+
+          await user.click(foundations[0]);
 
           const afterHand = screen.getByTestId('hand');
           const afterCardsInHand = within(afterHand).getAllByRole('button');
@@ -334,6 +341,8 @@ describe('GameLogic', () => {
         const foundationSection = screen.getByTestId('foundations');
         const foundations = within(foundationSection).getAllByRole('button');
 
+        await user.click(foundations[0]);
+
         expect(within(foundations[0]).getByText('A')).toBeVisible();
         expect(within(foundations[0]).getByAltText('of Spades')).toBeVisible();
       });
@@ -345,6 +354,11 @@ describe('GameLogic', () => {
         const tableauPiles = within(tableauSection).getAllByRole('button');
 
         await user.click(tableauPiles[12]);
+
+        const foundationSection = screen.getByTestId('foundations');
+        const foundations = within(foundationSection).getAllByRole('button');
+
+        await user.click(foundations[0]);
 
         const afterTableauSection = screen.getByTestId('tableau');
         const afterTableauPiles = within(afterTableauSection).getAllByRole('button');
@@ -375,6 +389,8 @@ describe('GameLogic', () => {
         const secondFoundationSection = screen.getByTestId('foundations');
         const secondFoundations = within(secondFoundationSection).getAllByRole('button');
 
+        await user.click(secondFoundations[0]);
+
         expect(within(secondFoundations[0]).getByText('A')).toBeVisible();
         expect(within(secondFoundations[0]).getByAltText('of Spades')).toBeVisible();
       });
@@ -385,14 +401,17 @@ describe('GameLogic', () => {
         const tableauSection = screen.getByTestId('tableau');
         const tableauPiles = within(tableauSection).getAllByRole('button');
 
-        await user.click(tableauPiles[12]);
-        await user.click(tableauPiles[10]);
-        await user.click(within(screen.getByTestId('hand')).getAllByRole('button')[0]);
-        await user.click(tableauPiles[10]);
-        await user.click(within(screen.getByTestId('hand')).getAllByRole('button')[0]);
-
         const foundationSection = screen.getByTestId('foundations');
         const foundations = within(foundationSection).getAllByRole('button');
+
+        await user.click(tableauPiles[12]);
+        await user.click(foundations[0]);
+        await user.click(tableauPiles[10]);
+        await user.click(within(screen.getByTestId('hand')).getAllByRole('button')[0]);
+        await user.click(foundations[1]);
+        await user.click(tableauPiles[10]);
+        await user.click(within(screen.getByTestId('hand')).getAllByRole('button')[0]);
+        await user.click(foundations[2]);
 
         expect(within(foundations[0]).getByText('A')).toBeVisible();
         expect(within(foundations[0]).getByAltText('of Spades')).toBeVisible();
@@ -408,11 +427,13 @@ describe('GameLogic', () => {
         const tableauSection = screen.getByTestId('tableau');
         const tableauPiles = within(tableauSection).getAllByRole('button');
 
-        await user.click(tableauPiles[12]);
-        await user.click(tableauPiles[13]);
-
         const foundationSection = screen.getByTestId('foundations');
         const foundations = within(foundationSection).getAllByRole('button');
+
+        await user.click(tableauPiles[12]);
+        await user.click(foundations[0]);
+        await user.click(tableauPiles[13]);
+        await user.click(foundations[0]);
 
         expect(within(foundations[0]).getByText('A')).toBeVisible();
         expect(within(foundations[0]).getByAltText('of Spades')).toBeVisible();
@@ -420,6 +441,7 @@ describe('GameLogic', () => {
         await user.click(tableauPiles[6]);
         const secondFoundationSection = screen.getByTestId('foundations');
         const secondFoundations = within(secondFoundationSection).getAllByRole('button');
+        await user.click(secondFoundations[0]);
 
         expect(within(secondFoundations[0]).getByText('2')).toBeVisible();
         expect(within(secondFoundations[0]).getByAltText('of Spades')).toBeVisible();
@@ -431,25 +453,31 @@ describe('GameLogic', () => {
         const tableauSection = screen.getByTestId('tableau');
         const tableauPiles = within(tableauSection).getAllByRole('button');
 
-        await user.click(tableauPiles[0]);
-
         const foundationSection = screen.getByTestId('foundations');
         const foundations = within(foundationSection).getAllByRole('button');
 
-        expect(within(foundations[5]).getByText('K')).toBeVisible();
-        expect(within(foundations[5]).queryByText('3')).not.toBeInTheDocument();
+        await user.click(tableauPiles[0]);
+        await user.click(foundations[4]);
+
+        expect(within(foundations[4]).getByText('K')).toBeVisible();
+        expect(within(foundations[4]).queryByText('3')).not.toBeInTheDocument();
 
         await user.click(tableauPiles[10]);
         await user.click(within(screen.getByTestId('hand')).getAllByRole('button')[0]);
+        await user.click(foundations[0]);
         await user.click(tableauPiles[10]);
         await user.click(within(screen.getByTestId('hand')).getAllByRole('button')[0]);
+        await user.click(foundations[1]);
         await user.click(tableauPiles[10]);
         await user.click(within(screen.getByTestId('hand')).getAllByRole('button')[0]);
+        await user.click(foundations[2]);
         await user.click(tableauPiles[10]);
         await user.click(within(screen.getByTestId('hand')).getAllByRole('button')[0]);
+        await user.click(foundations[3]);
         await user.click(tableauPiles[10]);
         await user.click(tableauPiles[1]);
         await user.click(within(screen.getByTestId('hand')).getByText('K'));
+        await user.click(foundations[4]);
 
         const secondFoundationSection = screen.getByTestId('foundations');
         const secondFoundations = within(secondFoundationSection).getAllByRole('button');
@@ -464,25 +492,30 @@ describe('GameLogic', () => {
         const tableauSection = screen.getByTestId('tableau');
         const tableauPiles = within(tableauSection).getAllByRole('button');
 
+        const foundationSection = screen.getByTestId('foundations');
+        const foundations = within(foundationSection).getAllByRole('button');
+
         await user.click(tableauPiles[10]);
         await user.click(within(screen.getByTestId('hand')).getAllByRole('button')[0]);
+        await user.click(foundations[0]);
         await user.click(tableauPiles[10]);
         await user.click(within(screen.getByTestId('hand')).getAllByRole('button')[0]);
+        await user.click(foundations[1]);
         await user.click(tableauPiles[10]);
         await user.click(within(screen.getByTestId('hand')).getAllByRole('button')[0]);
+        await user.click(foundations[2]);
         await user.click(tableauPiles[10]);
         await user.click(within(screen.getByTestId('hand')).getAllByRole('button')[0]);
+        await user.click(foundations[3]);
         await user.click(tableauPiles[10]);
         await user.click(tableauPiles[1]);
         await user.click(within(screen.getByTestId('hand')).getByText('K'));
-        await user.click(within(screen.getByTestId('hand')).getByText('2'));
+        await user.click(foundations[4]);
         await user.click(tableauPiles[1]);
         await user.click(tableauPiles[10]);
         await user.click(tableauPiles[2]);
         await user.click(within(screen.getByTestId('hand')).getByText('K'));
-
-        const foundationSection = screen.getByTestId('foundations');
-        const foundations = within(foundationSection).getAllByRole('button');
+        await user.click(foundations[5]);
 
         expect(within(foundations[4]).getByText('K')).toBeVisible();
         expect(within(foundations[4]).getByAltText('of Diamonds')).toBeVisible();
@@ -496,18 +529,26 @@ describe('GameLogic', () => {
         const tableauSection = screen.getByTestId('tableau');
         const tableauPiles = within(tableauSection).getAllByRole('button');
 
+        const foundationSection = screen.getByTestId('foundations');
+        const foundations = within(foundationSection).getAllByRole('button');
+
         //pull 18 cards to get a King and a Queen
         await user.click(tableauPiles[10]); //1
         await user.click(within(screen.getByTestId('hand')).getByText('A'));
+        await user.click(foundations[0]);
         await user.click(tableauPiles[10]); //2
         await user.click(within(screen.getByTestId('hand')).getByText('A'));
+        await user.click(foundations[1]);
         await user.click(tableauPiles[10]); //3
         await user.click(within(screen.getByTestId('hand')).getByText('A'));
+        await user.click(foundations[2]);
         await user.click(tableauPiles[10]); //4
         await user.click(within(screen.getByTestId('hand')).getByText('A'));
+        await user.click(foundations[3]);
         await user.click(tableauPiles[10]); //5
         await user.click(tableauPiles[1]);
         await user.click(within(screen.getByTestId('hand')).getByText('K'));
+        await user.click(foundations[4]);
         await user.click(tableauPiles[1]);
         await user.click(tableauPiles[10]); //6
         await user.click(tableauPiles[2]);
@@ -548,10 +589,9 @@ describe('GameLogic', () => {
         await user.click(tableauPiles[10]); //18
         await user.click(tableauPiles[8]);
         await user.click(within(screen.getByTestId('hand')).getByText('Q'));
+        await user.click(foundations[4]);
         await user.click(within(screen.getByTestId('hand')).getByText('9'));
-
-        const foundationSection = screen.getByTestId('foundations');
-        const foundations = within(foundationSection).getAllByRole('button');
+        await user.click(foundations[4]);
 
         expect(within(foundations[4]).getByText('Q')).toBeVisible();
         expect(within(foundations[4]).getByAltText('of Diamonds')).toBeVisible();
@@ -563,11 +603,13 @@ describe('GameLogic', () => {
         const tableauSection = screen.getByTestId('tableau');
         const tableauPiles = within(tableauSection).getAllByRole('button');
 
-        await user.click(tableauPiles[12]);
-        await user.click(tableauPiles[8]);
-
         const foundationSection = screen.getByTestId('foundations');
         const foundations = within(foundationSection).getAllByRole('button');
+
+        await user.click(tableauPiles[12]);
+        await user.click(foundations[0]);
+        await user.click(tableauPiles[8]);
+        await user.click(foundations[0]);
 
         expect(within(foundations[0]).getByText('A')).toBeVisible();
         expect(within(foundations[0]).getByAltText('of Spades')).toBeVisible();

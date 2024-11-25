@@ -6,13 +6,19 @@ import CardPile from '../cardPile/cardPile';
 import styles from './game.module.scss';
 
 export type GameProps = {
-  addCardToFoundation: (card: Card, tableauIndex?: number) => void;
+  addCardToFoundation: (card: Card, foundationIndex: number, tableauIndex?: number) => void;
   drawCard: () => void;
   drawnCard: Card | undefined;
   foundations: Card[][];
   hand: Card[];
   openClosePile: () => void;
   tableau: Card[][];
+};
+
+type SelectedCard = {
+  card: Card;
+  index: number;
+  isTableau: boolean;
 };
 
 export default function Game({
@@ -24,9 +30,10 @@ export default function Game({
   openClosePile,
   tableau
 }: GameProps) {
-  const [touchStartX, setTouchStartX] = useState(0);
-  const [touchStartY, setTouchStartY] = useState(0);
-  const [selectedCard, setSelectedCard] = useState(hand.length - 1);
+  const [touchStartX, setTouchStartX] = useState<number>(0);
+  const [touchStartY, setTouchStartY] = useState<number>(0);
+  const [hoveredCard, setHoveredCard] = useState<number>(hand.length - 1);
+  const [selectedCard, setSelectedCard] = useState<SelectedCard>();
 
   const minSwipeDistance = 20;
 
@@ -43,19 +50,32 @@ export default function Game({
     }
 
     if (xDistance > minSwipeDistance) {
-      if (selectedCard > 0) {
-        setSelectedCard(selectedCard - 1);
+      if (hoveredCard > 0) {
+        setHoveredCard(hoveredCard - 1);
       }
       setTouchStartX(e.targetTouches[0].clientX);
       setTouchStartY(e.targetTouches[0].clientY);
+      setSelectedCard({ card: hand[hoveredCard - 1], isTableau: false, index: hoveredCard - 1 });
     }
 
     if (xDistance < -minSwipeDistance) {
-      if (selectedCard < hand.length - 1) {
-        setSelectedCard(selectedCard + 1);
+      if (hoveredCard < hand.length - 1) {
+        setHoveredCard(hoveredCard + 1);
       }
       setTouchStartX(e.targetTouches[0].clientX);
       setTouchStartY(e.targetTouches[0].clientY);
+      setSelectedCard({ card: hand[hoveredCard + 1], isTableau: false, index: hoveredCard + 1 });
+    }
+  };
+
+  const tryToUseSelectedCard = (foundationIndex: number) => {
+    if (selectedCard) {
+      let tableauIndex = -1;
+      if (selectedCard.isTableau) {
+        tableauIndex = selectedCard.index;
+      }
+      addCardToFoundation(selectedCard.card, foundationIndex, tableauIndex);
+      setSelectedCard(undefined);
     }
   };
 
@@ -70,7 +90,7 @@ export default function Game({
             }
             return (
               <CardPile
-                handleCardPileInteract={() => {}}
+                handleCardPileInteract={() => tryToUseSelectedCard(index)}
                 isFaceUp={true}
                 key={index}
                 name={`Foundation ${index}`}
@@ -93,7 +113,7 @@ export default function Game({
             } else {
               if (cards.length > 0) {
                 handleCardPileInteract = () => {
-                  addCardToFoundation(cards[cards.length - 1], index);
+                  setSelectedCard({ card: cards[cards.length - 1], isTableau: true, index: index });
                 };
               }
             }
@@ -116,6 +136,11 @@ export default function Game({
                 handleCardPileInteract={() => handleCardPileInteract()}
                 key={index}
                 name={`Tableau ${index + 1}`}
+                extraClass={
+                  selectedCard && selectedCard.isTableau && index === selectedCard.index
+                    ? styles.selectedCard
+                    : ''
+                }
                 isFaceUp={label === 'S' ? false : true}
                 cards={cards}
                 label={label}
@@ -134,8 +159,14 @@ export default function Game({
               <CardPile
                 isFaceUp={true}
                 name={`Hand ${index + 1}`}
-                extraClass={index === selectedCard ? styles.selected : ''}
-                handleCardPileInteract={() => addCardToFoundation(card)}
+                extraClass={
+                  selectedCard && !selectedCard.isTableau && index === selectedCard.index
+                    ? `${styles.selected} ${styles.selectedCard}`
+                    : ''
+                }
+                handleCardPileInteract={() =>
+                  setSelectedCard({ card: card, isTableau: false, index: index })
+                }
                 key={index}
                 cards={[card]}
                 label=""
