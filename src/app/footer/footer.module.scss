@@ -3,4 +3,13 @@
   flex-grow: inherit;
   padding: 1rem;
   box-shadow: 0 -4px 4px rgb(0 0 0 / 25%);
+  justify-content: center;
+}
+
+.footerSection {
+  text-align: center;
+
+  h2 {
+    margin-bottom: 0.75rem;
+  }
 }

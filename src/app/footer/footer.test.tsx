@@ -1,16 +1,26 @@
 import '@testing-library/jest-dom';
 
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import React from 'react';
 
-import Footer from './footer';
+import Footer, { FooterProps } from './footer';
+
+const defaultProps: FooterProps = {
+  score: 104
+};
 
 describe('Footer', () => {
   it('renders itself', () => {
-    render(<Footer />);
+    render(<Footer {...defaultProps} />);
     expect(true);
-    // const heading = screen.getByRole("heading", { level: 1 });
-    // expect(heading).toBeInTheDocument();
-    // expect(heading.textContent).toEqual("Momitaire");
+  });
+
+  it('shows the score and value', () => {
+    render(<Footer {...defaultProps} />);
+    const scoreHeading = screen.getByText('Score');
+    const scoreValue = screen.getByText('104');
+
+    expect(scoreHeading).toBeVisible();
+    expect(scoreValue).toBeVisible();
   });
 });
