@@ -2,8 +2,10 @@
 import { useEffect, useState } from 'react';
 
 import { Card } from '../cardContent/cardContent';
+import Footer from '../footer/footer';
 import Game from '../game/game';
 import { BuildDeckService } from '../services/buildDeck/buildDeck.service';
+import styles from './gameLogic.module.scss';
 
 export default function GameLogic() {
   const [foundations, setFoundations] = useState<Card[][]>([[], [], [], [], [], [], [], []]);
@@ -25,6 +27,7 @@ export default function GameLogic() {
   ]);
   const [hand, setHand] = useState<Card[]>([]);
   const [drawnCard, setDrawnCard] = useState<Card>();
+  const [score, setScore] = useState<number>(104);
 
   const dealNewGame = (): Card[][] => {
     const deck: Card[] = BuildDeckService.buildDeck();
@@ -166,6 +169,8 @@ export default function GameLogic() {
     });
 
     setFoundations(newFoundations);
+    const newScore = score - 1;
+    setScore(newScore);
   };
 
   const ableToPlaceCard = (chosenCard: Card, foundationIndex: number): boolean => {
@@ -212,14 +217,19 @@ export default function GameLogic() {
   }, []);
 
   return (
-    <Game
-      addCardToFoundation={addCardToFoundation}
-      drawCard={drawCard}
-      drawnCard={drawnCard}
-      foundations={foundations}
-      hand={hand}
-      openClosePile={openClosePile}
-      tableau={tableau}
-    />
+    <>
+      <main className={styles.mainContent}>
+        <Game
+          addCardToFoundation={addCardToFoundation}
+          drawCard={drawCard}
+          drawnCard={drawnCard}
+          foundations={foundations}
+          hand={hand}
+          openClosePile={openClosePile}
+          tableau={tableau}
+        />
+      </main>
+      <Footer score={score}></Footer>
+    </>
   );
 }

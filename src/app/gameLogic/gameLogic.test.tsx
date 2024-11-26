@@ -173,6 +173,12 @@ describe('GameLogic', () => {
           }
         });
       });
+
+      it('shows the starting score of 104', () => {
+        render(<GameLogic />);
+        const scoreValue = screen.getByText('104');
+        expect(scoreValue).toBeVisible();
+      });
     });
 
     describe('when a card is drawn', () => {
@@ -380,6 +386,8 @@ describe('GameLogic', () => {
 
         const foundationSection = screen.getByTestId('foundations');
         const foundations = within(foundationSection).getAllByRole('button');
+
+        await user.click(foundations[0]);
 
         expect(within(foundations[0]).getByText('A')).toBeVisible();
         expect(within(foundations[0]).queryByText('3')).not.toBeInTheDocument();
@@ -613,6 +621,22 @@ describe('GameLogic', () => {
 
         expect(within(foundations[0]).getByText('A')).toBeVisible();
         expect(within(foundations[0]).getByAltText('of Spades')).toBeVisible();
+      });
+      it('decrements the score when a card is successfully added to a foundation pile', async () => {
+        const user = userEvent.setup();
+        render(<GameLogic />);
+
+        const tableauSection = screen.getByTestId('tableau');
+        const tableauPiles = within(tableauSection).getAllByRole('button');
+
+        const foundationSection = screen.getByTestId('foundations');
+        const foundations = within(foundationSection).getAllByRole('button');
+
+        await user.click(tableauPiles[12]);
+        await user.click(foundations[0]);
+
+        expect(screen.queryByText('104')).not.toBeInTheDocument();
+        expect(screen.getByText('103')).toBeVisible();
       });
     });
   });
