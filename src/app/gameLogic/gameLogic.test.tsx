@@ -639,5 +639,333 @@ describe('GameLogic', () => {
         expect(screen.getByText('103')).toBeVisible();
       });
     });
+
+    describe('when a move is undone', () => {
+      describe('when the last move was placing a card', () => {
+        it('increases the score by one', async () => {
+          const user = userEvent.setup();
+          render(<GameLogic></GameLogic>);
+
+          const tableauSection = screen.getByTestId('tableau');
+          const tableauPiles = within(tableauSection).getAllByRole('button');
+
+          const foundationSection = screen.getByTestId('foundations');
+          const foundations = within(foundationSection).getAllByRole('button');
+
+          await user.click(tableauPiles[12]);
+          await user.click(foundations[0]);
+
+          const undoBtn = screen.getByRole('button', { name: 'Undo' });
+          await user.click(undoBtn);
+
+          expect(screen.getByText('104')).toBeVisible();
+        });
+        describe('when the card came from the tableau', () => {
+          it('reverts the game to the previous state', async () => {
+            const user = userEvent.setup();
+            render(<GameLogic></GameLogic>);
+
+            const tableauSection = screen.getByTestId('tableau');
+            const tableauPiles = within(tableauSection).getAllByRole('button');
+
+            const foundationSection = screen.getByTestId('foundations');
+            const foundations = within(foundationSection).getAllByRole('button');
+
+            await user.click(tableauPiles[12]);
+            await user.click(foundations[0]);
+
+            const undoBtn = screen.getByRole('button', { name: 'Undo' });
+            await user.click(undoBtn);
+
+            expect(within(foundations[0]).getByText('A')).toBeVisible();
+            expect(within(foundations[0]).queryByAltText('of Spades')).not.toBeInTheDocument();
+            expect(within(tableauPiles[12]).getByText('A')).toBeVisible();
+            expect(within(tableauPiles[12]).getByAltText('of Spades')).toBeVisible();
+          });
+        });
+        describe('when the card came from the hand', () => {
+          it('reverts the game to the previous state when the hand is open', async () => {
+            const user = userEvent.setup();
+            render(<GameLogic></GameLogic>);
+
+            const tableauSection = screen.getByTestId('tableau');
+            const tableauPiles = within(tableauSection).getAllByRole('button');
+
+            const foundationSection = screen.getByTestId('foundations');
+            const foundations = within(foundationSection).getAllByRole('button');
+
+            // draw a card
+            await user.click(tableauPiles[10]);
+
+            // open ace pile
+            await user.click(tableauPiles[0]);
+
+            //close ace pile & draw again because there are 2 aces of hearts
+            await user.click(tableauPiles[0]);
+            await user.click(tableauPiles[10]);
+            await user.click(tableauPiles[0]);
+
+            //close ace pile & draw again so we can choose the second item in the hand
+            await user.click(tableauPiles[0]);
+            await user.click(tableauPiles[10]);
+            await user.click(tableauPiles[0]);
+
+            // place the ace of spades
+            await user.click(within(screen.getByTestId('hand')).getAllByRole('button')[1]);
+            await user.click(foundations[0]);
+
+            //keep pile open
+
+            //undo
+            await user.click(screen.getByRole('button', { name: 'Undo' }));
+
+            //check that there's nothing in the ace pile
+            expect(within(foundations[0]).getByText('A')).toBeVisible();
+            expect(within(foundations[0]).queryByAltText('of Spades')).not.toBeInTheDocument();
+
+            //check that there's nothing in the tableau spot
+            expect(within(tableauPiles[0]).getByText('A')).toBeVisible();
+            expect(within(tableauPiles[0]).queryByAltText('of Spades')).not.toBeInTheDocument();
+
+            //check that there's an ace of spades at the second spot of the hand
+            expect(
+              within(within(screen.getByTestId('hand')).getAllByRole('button')[1]).getByText('A')
+            ).toBeVisible();
+            expect(
+              within(within(screen.getByTestId('hand')).getAllByRole('button')[1]).getByAltText(
+                'of Spades'
+              )
+            ).toBeVisible();
+
+            //Chanck for an ace of diamonds at the beginning of the hand
+            expect(
+              within(within(screen.getByTestId('hand')).getAllByRole('button')[0]).getByText('A')
+            ).toBeVisible();
+            expect(
+              within(within(screen.getByTestId('hand')).getAllByRole('button')[0]).getByAltText(
+                'of Diamonds'
+              )
+            ).toBeVisible();
+
+            //check for the next 2 aces of hearts
+            expect(
+              within(within(screen.getByTestId('hand')).getAllByRole('button')[2]).getByText('A')
+            ).toBeVisible();
+            expect(
+              within(within(screen.getByTestId('hand')).getAllByRole('button')[2]).getByAltText(
+                'of Hearts'
+              )
+            ).toBeVisible();
+            expect(
+              within(within(screen.getByTestId('hand')).getAllByRole('button')[3]).getByText('A')
+            ).toBeVisible();
+            expect(
+              within(within(screen.getByTestId('hand')).getAllByRole('button')[3]).getByAltText(
+                'of Hearts'
+              )
+            ).toBeVisible();
+          });
+
+          it('reverts the game to the previous state when the hand is closed', async () => {
+            const user = userEvent.setup();
+            render(<GameLogic></GameLogic>);
+
+            const tableauSection = screen.getByTestId('tableau');
+            const tableauPiles = within(tableauSection).getAllByRole('button');
+
+            const foundationSection = screen.getByTestId('foundations');
+            const foundations = within(foundationSection).getAllByRole('button');
+
+            // draw a card
+            await user.click(tableauPiles[10]);
+
+            // open ace pile
+            await user.click(tableauPiles[0]);
+
+            //close ace pile & draw again because there are 2 aces of hearts
+            await user.click(tableauPiles[0]);
+            await user.click(tableauPiles[10]);
+            await user.click(tableauPiles[0]);
+
+            //close ace pile & draw again so we can choose the second item in the hand
+            await user.click(tableauPiles[0]);
+            await user.click(tableauPiles[10]);
+            await user.click(tableauPiles[0]);
+
+            // place the ace of spades
+            await user.click(within(screen.getByTestId('hand')).getAllByRole('button')[1]);
+            await user.click(foundations[0]);
+
+            //cloase the pile
+            await user.click(tableauPiles[0]);
+
+            //undo
+            await user.click(screen.getByRole('button', { name: 'Undo' }));
+
+            //check that there's nothing in the ace pile
+            expect(within(foundations[0]).getByText('A')).toBeVisible();
+            expect(within(foundations[0]).queryByAltText('of Spades')).not.toBeInTheDocument();
+
+            //check that there's an ace of spades at the second spot of the hand
+            expect(
+              within(within(screen.getByTestId('hand')).getAllByRole('button')[1]).getByText('A')
+            ).toBeVisible();
+            expect(
+              within(within(screen.getByTestId('hand')).getAllByRole('button')[1]).getByAltText(
+                'of Spades'
+              )
+            ).toBeVisible();
+
+            //Chanck for an ace of diamonds at the beginning of the hand
+            expect(
+              within(within(screen.getByTestId('hand')).getAllByRole('button')[0]).getByText('A')
+            ).toBeVisible();
+            expect(
+              within(within(screen.getByTestId('hand')).getAllByRole('button')[0]).getByAltText(
+                'of Diamonds'
+              )
+            ).toBeVisible();
+
+            //check for the next 2 aces of hearts
+            expect(
+              within(within(screen.getByTestId('hand')).getAllByRole('button')[2]).getByText('A')
+            ).toBeVisible();
+            expect(
+              within(within(screen.getByTestId('hand')).getAllByRole('button')[2]).getByAltText(
+                'of Hearts'
+              )
+            ).toBeVisible();
+            expect(
+              within(within(screen.getByTestId('hand')).getAllByRole('button')[3]).getByText('A')
+            ).toBeVisible();
+            expect(
+              within(within(screen.getByTestId('hand')).getAllByRole('button')[3]).getByAltText(
+                'of Hearts'
+              )
+            ).toBeVisible();
+          });
+        });
+      });
+
+      describe('when the last move was drawing a card', () => {
+        describe('when the first card is drawn', () => {
+          it('renders the game state to reflect no drawn card immediately after it was drawn', async () => {
+            const user = userEvent.setup();
+            render(<GameLogic></GameLogic>);
+
+            const tableauSection = screen.getByTestId('tableau');
+            const tableauPiles = within(tableauSection).getAllByRole('button');
+
+            await user.click(tableauPiles[10]);
+
+            const undoBtn = screen.getByRole('button', { name: 'Undo' });
+            await user.click(undoBtn);
+
+            expect(within(screen.getByTestId('hand')).queryAllByRole('button').length).toEqual(0);
+            expect(within(tableauPiles[0]).getByText('3')).toBeVisible();
+            expect(within(tableauPiles[0]).getByAltText('of Hearts')).toBeVisible();
+          });
+          it('renders the game state to reflect no drawn card after the pile was opened', async () => {
+            const user = userEvent.setup();
+            render(<GameLogic></GameLogic>);
+
+            const tableauSection = screen.getByTestId('tableau');
+            const tableauPiles = within(tableauSection).getAllByRole('button');
+
+            await user.click(tableauPiles[10]);
+            await user.click(tableauPiles[0]);
+
+            const undoBtn = screen.getByRole('button', { name: 'Undo' });
+            await user.click(undoBtn);
+
+            expect(within(screen.getByTestId('hand')).queryAllByRole('button').length).toEqual(0);
+            expect(within(tableauPiles[0]).getByText('3')).toBeVisible();
+            expect(within(tableauPiles[0]).getByAltText('of Hearts')).toBeVisible();
+          });
+          it('renders the game state to reflect no drawn card after the pile was opened & closed', async () => {
+            const user = userEvent.setup();
+            render(<GameLogic></GameLogic>);
+
+            const tableauSection = screen.getByTestId('tableau');
+            const tableauPiles = within(tableauSection).getAllByRole('button');
+
+            await user.click(tableauPiles[10]);
+            await user.click(tableauPiles[0]);
+            await user.click(tableauPiles[0]);
+
+            const undoBtn = screen.getByRole('button', { name: 'Undo' });
+            await user.click(undoBtn);
+
+            expect(within(screen.getByTestId('hand')).queryAllByRole('button').length).toEqual(0);
+            expect(within(tableauPiles[0]).getByText('3')).toBeVisible();
+            expect(within(tableauPiles[0]).getByAltText('of Hearts')).toBeVisible();
+          });
+        });
+        describe('when a card is drawn later in the game', () => {
+          it('renders the game state to open the pile of the previously drawn card immediately after it was drawn', async () => {
+            const user = userEvent.setup();
+            render(<GameLogic></GameLogic>);
+
+            const tableauSection = screen.getByTestId('tableau');
+            const tableauPiles = within(tableauSection).getAllByRole('button');
+
+            await user.click(tableauPiles[10]); // Ace of Hearts
+            await user.click(tableauPiles[0]);
+            await user.click(tableauPiles[0]);
+
+            await user.click(tableauPiles[10]); // Ace of Spades
+
+            const undoBtn = screen.getByRole('button', { name: 'Undo' });
+            await user.click(undoBtn);
+
+            expect(within(screen.getByTestId('hand')).queryAllByRole('button').length).toEqual(7);
+            expect(within(tableauPiles[0]).getByText('A')).toBeVisible();
+          });
+          it('renders the game state to open the pile of the previously drawn card after the pile was opened', async () => {
+            //turns out this is a special case where the current & previous drawn cards have the same value!
+            const user = userEvent.setup();
+            render(<GameLogic></GameLogic>);
+
+            const tableauSection = screen.getByTestId('tableau');
+            const tableauPiles = within(tableauSection).getAllByRole('button');
+
+            await user.click(tableauPiles[10]); // Ace of Hearts
+            await user.click(tableauPiles[0]);
+            await user.click(tableauPiles[0]);
+
+            await user.click(tableauPiles[10]); // Ace of Spades
+            await user.click(tableauPiles[0]);
+
+            const undoBtn = screen.getByRole('button', { name: 'Undo' });
+            await user.click(undoBtn);
+
+            expect(within(screen.getByTestId('hand')).queryAllByRole('button').length).toEqual(7);
+            expect(within(tableauPiles[0]).getByText('A')).toBeVisible();
+          });
+          it('renders the game state to open the pile of the previously drawn card after the pile was opened & closed', async () => {
+            //turns out this is a special case where the current & previous drawn cards have the same value!
+            const user = userEvent.setup();
+            render(<GameLogic></GameLogic>);
+
+            const tableauSection = screen.getByTestId('tableau');
+            const tableauPiles = within(tableauSection).getAllByRole('button');
+
+            await user.click(tableauPiles[10]); // Ace of Hearts
+            await user.click(tableauPiles[0]);
+            await user.click(tableauPiles[0]);
+
+            await user.click(tableauPiles[10]); // Ace of Spades
+            await user.click(tableauPiles[0]);
+            await user.click(tableauPiles[0]);
+
+            const undoBtn = screen.getByRole('button', { name: 'Undo' });
+            await user.click(undoBtn);
+
+            expect(within(screen.getByTestId('hand')).queryAllByRole('button').length).toEqual(7);
+            expect(within(tableauPiles[0]).getByText('A')).toBeVisible();
+          });
+        });
+      });
+    });
   });
 });

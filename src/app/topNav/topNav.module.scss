@@ -1,8 +1,9 @@
+@import '../colors.scss';
+
 .navContainer {
-  background-color: #0d1a0e;
+  background-color: $background;
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 0.5rem;
-  box-shadow: 0 4px 4px rgb(0 0 0 / 25%);
+  padding: 0 0.5rem;
 }
