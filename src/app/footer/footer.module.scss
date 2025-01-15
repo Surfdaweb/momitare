@@ -1,5 +1,7 @@
+@import '../colors.scss';
+
 .footerContainer {
-  background-color: #0d1a0e;
+  background-color: $background;
   flex-grow: inherit;
   padding: 1rem;
   box-shadow: 0 -4px 4px rgb(0 0 0 / 25%);

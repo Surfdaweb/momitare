@@ -1,0 +1,25 @@
+@import '../colors.scss';
+
+.actionBarContainer {
+  background-color: $background;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  padding-bottom: 1rem;
+  box-shadow: 0 4px 4px rgb(0 0 0 / 25%);
+}
+
+.actionBarButton {
+  display: flex;
+  flex-direction: column;
+  background-color: transparent;
+  color: #ddeede;
+  align-items: center;
+  padding: 0.5rem;
+
+  img {
+    padding-bottom: 0.25rem;
+  }
+}
