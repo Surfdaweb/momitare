@@ -63,10 +63,14 @@
 }
 
 .emptyPile {
-  border: 1px solid #90af92;
+  border: 1px solid $tertiary;
   border-radius: 3px;
   background: none;
   box-shadow: none;
-  color: #90af92;
+  color: $tertiary;
   font-size: 1.5rem;
+}
+
+.completedFoundation {
+  background-color: $tertiary;
 }

@@ -79,4 +79,13 @@ describe('CardContent', () => {
     render(<CardContent {...myProps} />);
     expect(screen.getByAltText('of Spades')).toBeVisible();
   });
+
+  it('renders an indication of a completed foundation', () => {
+    const myProps: CardProps = {
+      card: { suit: Suit.Spades, value: 1 },
+      isCompletedFoundation: true
+    };
+    render(<CardContent {...myProps} />);
+    expect(screen.getByAltText('of Spades Completed')).toBeVisible();
+  });
 });

@@ -337,4 +337,26 @@ describe('Game', () => {
       });
     });
   });
+
+  describe('when a foundation pile is finished', () => {
+    it('marks the pile as completed', () => {
+      const finishedFoundation: Card[] = [];
+      for (let i = 1; i < 14; i++) {
+        const newCard: Card = {
+          suit: Suit.Spades,
+          value: i
+        };
+        finishedFoundation.push(newCard);
+      }
+      const myProps: GameProps = {
+        ...defaultProps,
+        foundations: [finishedFoundation, [], [], [], [], [], [], []]
+      };
+      render(<Game {...myProps} />);
+
+      const foundationsSection = screen.getByTestId('foundations');
+      const foundationPiles = within(foundationsSection).getAllByRole('button');
+      expect(foundationPiles[0]).toHaveClass('completedFoundation');
+    });
+  });
 });

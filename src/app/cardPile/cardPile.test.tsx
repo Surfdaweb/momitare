@@ -76,6 +76,17 @@ describe('CardPile', () => {
         expect(screen.getByText('2')).toBeVisible();
         expect(screen.getByAltText('of Hearts')).toBeVisible();
       });
+      it('shows the completed style if it is a completed foundation pile', () => {
+        const myProps: CardPileProps = {
+          ...defaultProps,
+          cards: [{ suit: Suit.Hearts, value: 1 }],
+          isCompletedFoundation: true,
+          isFaceUp: true
+        };
+        render(<CardPile {...myProps} />);
+        const cardPile = screen.getByRole('button');
+        expect(cardPile).toHaveClass('completedFoundation');
+      });
     });
     it('calls handlePileInteract when the card pile is clicked', async () => {
       const user = userEvent.setup();

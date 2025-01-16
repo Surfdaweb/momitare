@@ -92,6 +92,7 @@ export default function Game({
               <CardPile
                 handleCardPileInteract={() => tryToUseSelectedCard(index)}
                 isFaceUp={true}
+                isCompletedFoundation={cards.length === 13}
                 key={index}
                 name={`Foundation ${index}`}
                 cards={cards}

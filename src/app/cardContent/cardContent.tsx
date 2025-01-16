@@ -14,9 +14,10 @@ export interface Card {
 
 export interface CardProps {
   card: Card;
+  isCompletedFoundation?: boolean;
 }
 
-export default function CardContent({ card }: CardProps) {
+export default function CardContent({ card, isCompletedFoundation = false }: CardProps) {
   let cardValLabel = '';
   let suitLabel = '';
   let isRedCard = false;
@@ -57,11 +58,17 @@ export default function CardContent({ card }: CardProps) {
       suitLabel = 'error';
       break;
   }
+  const altText = `of ${suitLabel}${isCompletedFoundation ? ' Completed' : ''}`;
+  const imgSrc = `/${suitLabel}${isCompletedFoundation ? '-completed' : ''}.png`;
 
   return (
     <>
-      <p className={`${styles.cardValue} ${isRedCard ? styles.redCard : ''}`}>{cardValLabel}</p>
-      <img src={`/${suitLabel}.png`} alt={`of ${suitLabel}`} />
+      <p
+        className={`${styles.cardValue} ${isRedCard ? styles.redCard : ''} ${isCompletedFoundation ? styles.completedFoundation : ''}`}
+      >
+        {cardValLabel}
+      </p>
+      <img src={imgSrc} alt={altText} />
     </>
   );
 }
