@@ -18,13 +18,15 @@ export default function CardPile({
   isCompletedFoundation = false,
   isFaceUp = false,
   name,
-  label = '',
+  label,
   handleCardPileInteract
 }: CardPileProps) {
   if (cards.length == 0) {
     return (
       <button
-        onClick={() => handleCardPileInteract()}
+        onClick={() => {
+          handleCardPileInteract();
+        }}
         className={`${styles.card} ${styles.emptyPile}`}
         aria-label={`The ${name} pile is empty`}
       >
@@ -35,7 +37,9 @@ export default function CardPile({
 
   return (
     <button
-      onClick={() => handleCardPileInteract()}
+      onClick={() => {
+        handleCardPileInteract();
+      }}
       className={`${styles.card} 
         ${isFaceUp ? styles.faceUpCard : styles.faceDownCard}
         ${isCompletedFoundation ? styles.completedFoundation : ''}

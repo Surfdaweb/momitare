@@ -37,7 +37,7 @@ export default function CardContent({ card, isCompletedFoundation = false }: Car
       cardValLabel = 'K';
       break;
     default:
-      cardValLabel = `${card.value}`;
+      cardValLabel = card.value.toString();
       break;
   }
 

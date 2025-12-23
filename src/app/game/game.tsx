@@ -1,6 +1,5 @@
 'use client';
 import { useState } from 'react';
-
 import { Card } from '../cardContent/cardContent';
 import CardPile from '../cardPile/cardPile';
 import styles from './game.module.scss';
@@ -90,11 +89,13 @@ export default function Game({
             }
             return (
               <CardPile
-                handleCardPileInteract={() => tryToUseSelectedCard(index)}
+                handleCardPileInteract={() => {
+                  tryToUseSelectedCard(index);
+                }}
                 isFaceUp={true}
                 isCompletedFoundation={cards.length === 13}
                 key={index}
-                name={`Foundation ${index}`}
+                name={`Foundation ${index.toString()}`}
                 cards={cards}
                 label={label}
               />
@@ -103,7 +104,7 @@ export default function Game({
         </div>
         <div className={styles.tableau} data-testid="tableau">
           {tableau.map((cards, index) => {
-            let label = `${index + 1}`;
+            let label = (index + 1).toString();
             let handleCardPileInteract = () => {};
             if (
               drawnCard &&
@@ -134,9 +135,11 @@ export default function Game({
 
             return (
               <CardPile
-                handleCardPileInteract={() => handleCardPileInteract()}
+                handleCardPileInteract={() => {
+                  handleCardPileInteract();
+                }}
                 key={index}
-                name={`Tableau ${index + 1}`}
+                name={`Tableau ${(index + 1).toString()}`}
                 extraClass={
                   selectedCard && selectedCard.isTableau && index === selectedCard.index
                     ? styles.selectedCard
@@ -159,15 +162,15 @@ export default function Game({
             hand.map((card, index) => (
               <CardPile
                 isFaceUp={true}
-                name={`Hand ${index + 1}`}
+                name={`Hand ${(index + 1).toString()}`}
                 extraClass={
                   selectedCard && !selectedCard.isTableau && index === selectedCard.index
                     ? `${styles.selected} ${styles.selectedCard}`
                     : ''
                 }
-                handleCardPileInteract={() =>
-                  setSelectedCard({ card: card, isTableau: false, index: index })
-                }
+                handleCardPileInteract={() => {
+                  setSelectedCard({ card: card, isTableau: false, index: index });
+                }}
                 key={index}
                 cards={[card]}
                 label=""
