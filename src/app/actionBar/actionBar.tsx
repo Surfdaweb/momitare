@@ -9,7 +9,7 @@ export default function ActionBar({ undoMove }: ActionBarProps) {
     <>
       <div className={styles.actionBarContainer}>
         <button className={styles.actionBarButton} onClick={undoMove}>
-          <img src="/Undo.png" />
+          <img src="/Undo.png" alt="undo move" />
           Undo
         </button>
       </div>
