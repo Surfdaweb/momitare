@@ -29,5 +29,5 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       - run: npm run lint
-      - run: npm run format --log-level debug
+      - run: npm run format
       - run: npm test
