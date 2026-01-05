@@ -2,7 +2,6 @@ import '@testing-library/jest-dom';
 
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 
 import { Card, Suit } from '../cardContent/cardContent';
 import Game, { GameProps } from './game';

@@ -21,7 +21,8 @@ body {
   --s: 10px; /* control the size */
   --c1: #122113;
   --c2: #1b311d;
-  --g: var(--c1) 3.125%, var(--c2) 0 9.375%, var(--c1) 0 15.625%, var(--c2) 0 21.875%,
+  --g:
+    var(--c1) 3.125%, var(--c2) 0 9.375%, var(--c1) 0 15.625%, var(--c2) 0 21.875%,
     var(--c1) 0 28.125%, #0000 0;
   background:
     linear-gradient(
