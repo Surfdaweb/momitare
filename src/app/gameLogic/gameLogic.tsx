@@ -94,6 +94,55 @@ export default function GameLogic() {
     return newTableau;
   };
 
+  // const dealNewGame2 = (): Card[][] => {
+  //   const deck: Card[] = BuildDeckService.buildDeck();
+  //   const newTableau: Card[][] = [[], [], [], [], [], [], [], [], [], [], [], [], [], []];
+
+  //   let newTableauIndex = 0;
+  //   while (deck.length > 0) {
+  //     const originalCardDealt = deck.pop();
+  //     if (originalCardDealt) {
+  //       newTableau[newTableauIndex].push(originalCardDealt);
+
+  //       if (newTableauIndex === 6 || newTableauIndex === 13) {
+  //         const endOfRowCard = deck.pop();
+  //         if (!endOfRowCard) {
+  //           break;
+  //         }
+  //         newTableau[10].push(endOfRowCard);
+  //       }
+
+  //       if (newTableauIndex != 10 && originalCardDealt.value === 1) {
+  //         const aceCard = deck.pop();
+  //         if (!aceCard) {
+  //           break;
+  //         }
+  //         newTableau[10].push(aceCard);
+  //       }
+
+  //       if (
+  //         newTableauIndex != 10 &&
+  //         ((originalCardDealt.value < 11 && originalCardDealt.value === newTableauIndex + 1) ||
+  //           (originalCardDealt.value > 10 && originalCardDealt.value === newTableauIndex))
+  //       ) {
+  //         const matchingCard = deck.pop();
+  //         if (!matchingCard) {
+  //           break;
+  //         }
+  //         newTableau[10].push(matchingCard);
+  //       }
+
+  //       if (newTableauIndex > 12) {
+  //         newTableauIndex = 0;
+  //       } else {
+  //         newTableauIndex++;
+  //       }
+  //     }
+  //   }
+
+  //   return newTableau;
+  // };
+
   const drawCard = () => {
     if (hand.length > 0) {
       return;
@@ -393,6 +442,15 @@ export default function GameLogic() {
     }
   };
 
+  const startNewGame = () => {
+    setScore(104);
+    setFoundations([[], [], [], [], [], [], [], []]);
+    setHand([]);
+    setDrawnCard(undefined);
+    setCommandStack([]);
+    //setTableau(dealNewGame2());
+  };
+
   const addCardToArrayAtIndex = (
     card: Card,
     indexToAddCardTo: number,
@@ -424,7 +482,7 @@ export default function GameLogic() {
 
   return (
     <>
-      <ActionBar undoMove={undoMove} />
+      <ActionBar undoMove={undoMove} startNewGame={startNewGame} />
       <main className={styles.mainContent}>
         <Game
           addCardToFoundation={addCardToFoundation}
