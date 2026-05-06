@@ -2,13 +2,13 @@ import '@testing-library/jest-dom';
 
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 
 import { Card, Suit } from '../cardContent/cardContent';
 import { BuildDeckService } from '../services/buildDeck/buildDeck.service';
 import GameLogic from './gameLogic';
 
 describe('GameLogic', () => {
+  const buildDeckSpy = jest.spyOn(BuildDeckService, 'buildDeck');
   beforeEach(() => {
     const expectedDeck: Card[] = [
       { value: 1, suit: Suit.Hearts }, // S  1
@@ -130,7 +130,7 @@ describe('GameLogic', () => {
       { value: 1, suit: Suit.Hearts } // A
     ];
 
-    jest.spyOn(BuildDeckService, 'buildDeck').mockReturnValue(expectedDeck);
+    buildDeckSpy.mockReturnValue(expectedDeck);
   });
   afterEach(() => {
     jest.resetAllMocks();
@@ -965,6 +965,142 @@ describe('GameLogic', () => {
             expect(within(tableauPiles[0]).getByText('A')).toBeVisible();
           });
         });
+      });
+    });
+
+    describe('when a new game is started', () => {
+      it('resets the score to 104', async () => {
+        const user = userEvent.setup();
+        render(<GameLogic></GameLogic>);
+
+        const tableauSection = screen.getByTestId('tableau');
+        const tableauPiles = within(tableauSection).getAllByRole('button');
+
+        const foundationSection = screen.getByTestId('foundations');
+        const foundations = within(foundationSection).getAllByRole('button');
+
+        await user.click(tableauPiles[12]);
+        await user.click(foundations[0]);
+        await user.click(tableauPiles[10]);
+        await user.click(within(screen.getByTestId('hand')).getAllByRole('button')[0]);
+        await user.click(foundations[1]);
+        await user.click(tableauPiles[10]);
+        await user.click(within(screen.getByTestId('hand')).getAllByRole('button')[0]);
+        await user.click(foundations[2]);
+
+        const newGameBtn = screen.getByRole('button', { name: 'New Game' });
+        await user.click(newGameBtn);
+
+        expect(screen.getByText('104')).toBeVisible();
+      });
+
+      it('removes all cards from the foundation piles', async () => {
+        const user = userEvent.setup();
+        render(<GameLogic></GameLogic>);
+
+        const tableauSection = screen.getByTestId('tableau');
+        const tableauPiles = within(tableauSection).getAllByRole('button');
+
+        const foundationSection = screen.getByTestId('foundations');
+        const foundations = within(foundationSection).getAllByRole('button');
+
+        await user.click(tableauPiles[12]);
+        await user.click(foundations[0]);
+
+        const newGameBtn = screen.getByRole('button', { name: 'New Game' });
+        await user.click(newGameBtn);
+
+        expect(within(foundations[0]).queryByText('A')).toBeVisible();
+        expect(within(foundations[0]).queryByAltText('of Spades')).not.toBeInTheDocument();
+      });
+
+      it('removes any cards from the hand', async () => {
+        const user = userEvent.setup();
+        render(<GameLogic></GameLogic>);
+
+        const tableauSection = screen.getByTestId('tableau');
+        const tableauPiles = within(tableauSection).getAllByRole('button');
+
+        await user.click(tableauPiles[10]);
+
+        const newGameBtn = screen.getByRole('button', { name: 'New Game' });
+        await user.click(newGameBtn);
+
+        const hand = screen.getByTestId('hand');
+        const cardsInHand = within(hand).queryAllByRole('button');
+
+        expect(cardsInHand.length).toEqual(0);
+      });
+
+      it('prevents the opening of any tableau piles', async () => {
+        const user = userEvent.setup();
+        render(<GameLogic></GameLogic>);
+
+        const tableauSection = screen.getByTestId('tableau');
+        const tableauPiles = within(tableauSection).getAllByRole('button');
+
+        await user.click(tableauPiles[10]);
+
+        const newDeck: Card[] = [];
+        const card: Card = { value: 4, suit: Suit.Clubs };
+        for (let i = 0; i < 103; i++) {
+          newDeck.push(card);
+        }
+        buildDeckSpy.mockReturnValueOnce(newDeck);
+
+        const newGameBtn = screen.getByRole('button', { name: 'New Game' });
+        await user.click(newGameBtn);
+        await user.click(tableauPiles[0]);
+
+        const hand = screen.getByTestId('hand');
+        const cardsInHand = within(hand).queryAllByRole('button');
+
+        expect(cardsInHand.length).toEqual(0);
+        expect(within(tableauPiles[0]).queryByText('A')).not.toBeInTheDocument();
+      });
+
+      it('resets the undo stack', async () => {
+        const user = userEvent.setup();
+        render(<GameLogic></GameLogic>);
+
+        const tableauSection = screen.getByTestId('tableau');
+        const tableauPiles = within(tableauSection).getAllByRole('button');
+
+        const foundationSection = screen.getByTestId('foundations');
+        const foundations = within(foundationSection).getAllByRole('button');
+
+        await user.click(tableauPiles[10]);
+        await user.click(within(screen.getByTestId('hand')).getAllByRole('button')[0]);
+        await user.click(foundations[1]);
+
+        const newGameBtn = screen.getByRole('button', { name: 'New Game' });
+        await user.click(newGameBtn);
+
+        const undoBtn = screen.getByRole('button', { name: 'Undo' });
+        await user.click(undoBtn);
+
+        expect(screen.getByText('104')).toBeVisible();
+      });
+
+      it('deals a new game to the tableau', async () => {
+        const user = userEvent.setup();
+        render(<GameLogic></GameLogic>);
+
+        const newDeck: Card[] = [];
+        const card: Card = { value: 4, suit: Suit.Clubs };
+        for (let i = 0; i < 103; i++) {
+          newDeck.push(card);
+        }
+        buildDeckSpy.mockReturnValueOnce(newDeck);
+
+        const newGameBtn = screen.getByRole('button', { name: 'New Game' });
+        await user.click(newGameBtn);
+
+        const tableauSection = screen.getByTestId('tableau');
+        const tableauPiles = within(tableauSection).getAllByRole('button');
+
+        expect(within(tableauPiles[0]).getByText('4')).toBeVisible();
+        expect(within(tableauPiles[0]).getByAltText('of Clubs')).toBeVisible();
       });
     });
   });

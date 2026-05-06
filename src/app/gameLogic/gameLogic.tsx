@@ -393,6 +393,15 @@ export default function GameLogic() {
     }
   };
 
+  const startNewGame = () => {
+    setScore(104);
+    setFoundations([[], [], [], [], [], [], [], []]);
+    setHand([]);
+    setDrawnCard(undefined);
+    setCommandStack([]);
+    setTableau(dealNewGame());
+  };
+
   const addCardToArrayAtIndex = (
     card: Card,
     indexToAddCardTo: number,
@@ -424,7 +433,7 @@ export default function GameLogic() {
 
   return (
     <>
-      <ActionBar undoMove={undoMove} />
+      <ActionBar undoMove={undoMove} startNewGame={startNewGame} />
       <main className={styles.mainContent}>
         <Game
           addCardToFoundation={addCardToFoundation}
