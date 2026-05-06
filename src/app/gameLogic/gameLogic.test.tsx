@@ -8,7 +8,7 @@ import { BuildDeckService } from '../services/buildDeck/buildDeck.service';
 import GameLogic from './gameLogic';
 
 describe('GameLogic', () => {
-  //const buildDeckSpy = jest.spyOn(BuildDeckService, 'buildDeck');
+  const buildDeckSpy = jest.spyOn(BuildDeckService, 'buildDeck');
   beforeEach(() => {
     const expectedDeck: Card[] = [
       { value: 1, suit: Suit.Hearts }, // S  1
@@ -130,7 +130,7 @@ describe('GameLogic', () => {
       { value: 1, suit: Suit.Hearts } // A
     ];
 
-    jest.spyOn(BuildDeckService, 'buildDeck').mockReturnValue(expectedDeck);
+    buildDeckSpy.mockReturnValue(expectedDeck);
   });
   afterEach(() => {
     jest.resetAllMocks();
@@ -1041,6 +1041,13 @@ describe('GameLogic', () => {
 
         await user.click(tableauPiles[10]);
 
+        const newDeck: Card[] = [];
+        const card: Card = { value: 4, suit: Suit.Clubs };
+        for (let i = 0; i < 103; i++) {
+          newDeck.push(card);
+        }
+        buildDeckSpy.mockReturnValueOnce(newDeck);
+
         const newGameBtn = screen.getByRole('button', { name: 'New Game' });
         await user.click(newGameBtn);
         await user.click(tableauPiles[0]);
@@ -1049,7 +1056,7 @@ describe('GameLogic', () => {
         const cardsInHand = within(hand).queryAllByRole('button');
 
         expect(cardsInHand.length).toEqual(0);
-        expect(within(tableauPiles[0]).getByText('3')).toBeVisible();
+        expect(within(tableauPiles[0]).queryByText('A')).not.toBeInTheDocument();
       });
 
       it('resets the undo stack', async () => {
@@ -1075,26 +1082,26 @@ describe('GameLogic', () => {
         expect(screen.getByText('104')).toBeVisible();
       });
 
-      // it('deals a new game to the tableau', async () => {
-      //   const user = userEvent.setup();
-      //   render(<GameLogic></GameLogic>);
+      it('deals a new game to the tableau', async () => {
+        const user = userEvent.setup();
+        render(<GameLogic></GameLogic>);
 
-      //   const newDeck: Card[] = [];
-      //   const card: Card = { value: 4, suit: Suit.Clubs };
-      //   for (let i = 0; i < 103; i++) {
-      //     newDeck.push(card);
-      //   }
-      //   ///buildDeckSpy.mockReturnValueOnce(newDeck);
+        const newDeck: Card[] = [];
+        const card: Card = { value: 4, suit: Suit.Clubs };
+        for (let i = 0; i < 103; i++) {
+          newDeck.push(card);
+        }
+        buildDeckSpy.mockReturnValueOnce(newDeck);
 
-      //   const newGameBtn = screen.getByRole('button', { name: 'New Game' });
-      //   await user.click(newGameBtn);
+        const newGameBtn = screen.getByRole('button', { name: 'New Game' });
+        await user.click(newGameBtn);
 
-      //   const tableauSection = screen.getByTestId('tableau');
-      //   const tableauPiles = within(tableauSection).getAllByRole('button');
+        const tableauSection = screen.getByTestId('tableau');
+        const tableauPiles = within(tableauSection).getAllByRole('button');
 
-      //   expect(within(tableauPiles[0]).getByText('4')).toBeVisible();
-      //   expect(within(tableauPiles[0]).getByAltText('of Clubs')).toBeVisible();
-      // });
+        expect(within(tableauPiles[0]).getByText('4')).toBeVisible();
+        expect(within(tableauPiles[0]).getByAltText('of Clubs')).toBeVisible();
+      });
     });
   });
 });
