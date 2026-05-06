@@ -46,9 +46,14 @@ export default function CardPile({
         ${extraClass}
       `}
     >
-      {isFaceUp && (
-        <CardContent card={cards[cards.length - 1]} isCompletedFoundation={isCompletedFoundation} />
-      )}
+      <div>
+        {isFaceUp && (
+          <CardContent
+            card={cards[cards.length - 1]}
+            isCompletedFoundation={isCompletedFoundation}
+          />
+        )}
+      </div>
     </button>
   );
 }

@@ -1,4 +1,4 @@
-@import '../colors.scss';
+@use '../colors';
 
 .card {
   height: 64px;
@@ -64,14 +64,14 @@
 }
 
 .emptyPile {
-  border: 1px solid $tertiary;
+  border: 1px solid colors.$tertiary;
   border-radius: 3px;
   background: none;
   box-shadow: none;
-  color: $tertiary;
+  color: colors.$tertiary;
   font-size: 1.5rem;
 }
 
 .completedFoundation {
-  background-color: $tertiary;
+  background-color: colors.$tertiary;
 }
