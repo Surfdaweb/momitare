@@ -1,16 +1,31 @@
-@import '../colors.scss';
+@use '../colors';
+
+$cardShadow: 0px 0px 4px 2px rgb(0, 0, 0, 0.5);
+$faceDownCardBorder: inset 0px 0px 0px 4px #fff;
+$twoCardStack: 0px 1px 0px 0px gray;
+$threeCardStack: 0px 2px 0px 0px gray;
+$fourCardStack: 0px 3px 0px 0px gray;
+$fiveCardStack: 0px 4px 0px 0px gray;
+$sixCardStack: 0px 5px 0px 0px gray;
+$sevenCardStack: 0px 6px 0px 0px gray;
+$eightCardStack: 0px 7px 0px 0px gray;
+$nineCardStack: 0px 8px 0px 0px gray;
+$tenPlusCardStack: 0px 9px 0px 0px gray;
 
 .card {
   height: 64px;
   width: 46px;
   padding: 0;
-  box-shadow: 0px 0px 4px 2px rgb(0, 0, 0, 0.5);
+  margin-bottom: .25rem;
+  box-shadow:
+    $cardShadow;
+  ;
 }
 
 .faceDownCard {
   box-shadow:
-    inset 0px 0px 0px 4px #fff,
-    0px 0px 4px 2px rgb(0, 0, 0, 0.25);
+    $faceDownCardBorder,
+    $cardShadow;
 
   --c: #71100f;
   background:
@@ -63,15 +78,129 @@
   opacity: 1;
 }
 
+.cardStack2 {
+  box-shadow: $twoCardStack, 
+    $cardShadow;
+  transform: translateY(-1px);
+}
+
+.faceDownCard.cardStack2 {
+  box-shadow: $faceDownCardBorder,
+    $twoCardStack, 
+    $cardShadow;
+}
+
+.cardStack3 {
+  box-shadow: $threeCardStack, 
+    $cardShadow;
+  transform: translateY(-2px);
+}
+
+.faceDownCard.cardStack3 {
+  box-shadow: $faceDownCardBorder,
+    $threeCardStack, 
+    $cardShadow;
+}
+
+.cardStack4 {
+  box-shadow: $fourCardStack, 
+    $cardShadow;
+  transform: translateY(-3px);
+}
+
+.faceDownCard.cardStack4 {
+  box-shadow: $faceDownCardBorder,
+    $fourCardStack, 
+    $cardShadow;
+}
+
+.cardStack5 {
+  box-shadow: $fiveCardStack, 
+    $cardShadow;
+  transform: translateY(-4px);
+}
+
+.faceDownCard.cardStack5 {
+  box-shadow: $faceDownCardBorder,
+    $fiveCardStack, 
+    $cardShadow;
+}
+
+.cardStack6 {
+  box-shadow: $sixCardStack, 
+    $cardShadow;
+  transform: translateY(-5px);
+}
+
+.faceDownCard.cardStack6 {
+  box-shadow: $faceDownCardBorder,
+    $sixCardStack, 
+    $cardShadow;
+}
+
+.cardStack7 {
+  box-shadow: $sevenCardStack, 
+    $cardShadow;
+  transform: translateY(-6px);
+}
+
+.faceDownCard.cardStack7 {
+  box-shadow: $faceDownCardBorder,
+    $sevenCardStack, 
+    $cardShadow;
+}
+
+.cardStack8 {
+  box-shadow: $eightCardStack, 
+    $cardShadow;
+  transform: translateY(-7px);
+}
+
+.faceDownCard.cardStack8 {
+  box-shadow: $faceDownCardBorder,
+    $eightCardStack, 
+    $cardShadow;
+}
+
+.cardStack9 {
+  box-shadow: $nineCardStack, 
+    $cardShadow;
+  transform: translateY(-8px);
+}
+
+.faceDownCard.cardStack9 {
+  box-shadow: $faceDownCardBorder,
+    $nineCardStack, 
+    $cardShadow;
+}
+
+.cardStack10Plus {
+  box-shadow: $tenPlusCardStack, 
+    $cardShadow;
+  transform: translateY(-9px);
+}
+
+.faceDownCard.cardStack10Plus {
+  box-shadow: $faceDownCardBorder,
+    $tenPlusCardStack, 
+    $cardShadow;
+}
+
 .emptyPile {
-  border: 1px solid $tertiary;
+  border: 1px solid colors.$tertiary;
   border-radius: 3px;
   background: none;
   box-shadow: none;
-  color: $tertiary;
+  color: colors.$tertiary;
   font-size: 1.5rem;
 }
 
 .completedFoundation {
-  background-color: $tertiary;
+  background-color: colors.$tertiary;
+  box-shadow: 0px 9px 0px 0px #546755, 
+    $cardShadow;
+}
+
+.selectedCard {
+  background-color: #d6ead8;
 }

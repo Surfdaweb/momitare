@@ -8,6 +8,7 @@ export interface CardPileProps {
   handleCardPileInteract: () => void;
   isCompletedFoundation?: boolean;
   isFaceUp?: boolean;
+  isSelected?: boolean;
   label: string;
   name: string;
 }
@@ -17,6 +18,7 @@ export default function CardPile({
   extraClass = '',
   isCompletedFoundation = false,
   isFaceUp = false,
+  isSelected = false,
   name,
   label,
   handleCardPileInteract
@@ -41,14 +43,29 @@ export default function CardPile({
         handleCardPileInteract();
       }}
       className={`${styles.card} 
-        ${isFaceUp ? styles.faceUpCard : styles.faceDownCard}
+        ${isFaceUp ? '' : styles.faceDownCard}
+        ${isSelected ? styles.selectedCard : ''}
+        ${cards.length === 2 ? styles.cardStack2 : ''}
+        ${cards.length === 3 ? styles.cardStack3 : ''}
+        ${cards.length === 4 ? styles.cardStack4 : ''}
+        ${cards.length === 5 ? styles.cardStack5 : ''}
+        ${cards.length === 6 ? styles.cardStack6 : ''}
+        ${cards.length === 7 ? styles.cardStack7 : ''}
+        ${cards.length === 8 ? styles.cardStack8 : ''}
+        ${cards.length === 9 ? styles.cardStack9 : ''}
+        ${cards.length >= 10 ? styles.cardStack10Plus : ''}
         ${isCompletedFoundation ? styles.completedFoundation : ''}
         ${extraClass}
       `}
     >
-      {isFaceUp && (
-        <CardContent card={cards[cards.length - 1]} isCompletedFoundation={isCompletedFoundation} />
-      )}
+      <div>
+        {isFaceUp && (
+          <CardContent
+            card={cards[cards.length - 1]}
+            isCompletedFoundation={isCompletedFoundation}
+          />
+        )}
+      </div>
     </button>
   );
 }

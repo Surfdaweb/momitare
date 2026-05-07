@@ -140,11 +140,7 @@ export default function Game({
                 }}
                 key={index}
                 name={`Tableau ${(index + 1).toString()}`}
-                extraClass={
-                  selectedCard && selectedCard.isTableau && index === selectedCard.index
-                    ? styles.selectedCard
-                    : ''
-                }
+                isSelected={selectedCard && selectedCard.isTableau && index === selectedCard.index}
                 isFaceUp={label === 'S' ? false : true}
                 cards={cards}
                 label={label}
@@ -163,9 +159,10 @@ export default function Game({
               <CardPile
                 isFaceUp={true}
                 name={`Hand ${(index + 1).toString()}`}
+                isSelected={selectedCard && !selectedCard.isTableau && index === selectedCard.index}
                 extraClass={
                   selectedCard && !selectedCard.isTableau && index === selectedCard.index
-                    ? `${styles.selected} ${styles.selectedCard}`
+                    ? styles.selectedCard
                     : ''
                 }
                 handleCardPileInteract={() => {

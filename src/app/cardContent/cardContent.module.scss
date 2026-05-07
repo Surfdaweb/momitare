@@ -1,4 +1,4 @@
-@import '../colors.scss';
+@use '../colors';
 
 .cardValue {
   width: 19px;
@@ -9,7 +9,7 @@
 }
 
 .redCard {
-  color: $accent;
+  color: colors.$accent;
 }
 
 .completedFoundation {

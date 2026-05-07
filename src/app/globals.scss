@@ -1,5 +1,5 @@
+@use 'colors';
 @import url('https://fonts.googleapis.com/css?family=Tauri:700|Tauri:400');
-@import 'colors.scss';
 
 html {
   font-size: 100%;
@@ -14,7 +14,7 @@ body {
 body {
   font-family: 'Tauri', sans-serif;
   font-weight: 400;
-  color: $text;
+  color: colors.$text;
   display: flex;
   flex-direction: column;
 
@@ -89,8 +89,8 @@ a {
 button {
   border: 0;
   border-radius: 0.25rem;
-  background: $primary;
-  color: $background;
+  background: colors.$primary;
+  color: colors.$background;
   font-family: 'Tauri', sans-serif;
   font-size: 1rem;
   line-height: 1.2rem;
@@ -98,6 +98,7 @@ button {
   text-decoration: none;
   padding: 0.5rem 2rem;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .container {
