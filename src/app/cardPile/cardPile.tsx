@@ -8,6 +8,7 @@ export interface CardPileProps {
   handleCardPileInteract: () => void;
   isCompletedFoundation?: boolean;
   isFaceUp?: boolean;
+  isSelected?: boolean;
   label: string;
   name: string;
 }
@@ -17,6 +18,7 @@ export default function CardPile({
   extraClass = '',
   isCompletedFoundation = false,
   isFaceUp = false,
+  isSelected = false,
   name,
   label,
   handleCardPileInteract
@@ -41,8 +43,9 @@ export default function CardPile({
         handleCardPileInteract();
       }}
       className={`${styles.card} 
-        ${isFaceUp ? styles.faceUpCard : styles.faceDownCard}
+        ${isFaceUp ? '' : styles.faceDownCard}
         ${isCompletedFoundation ? styles.completedFoundation : ''}
+        ${isSelected ? styles.selectedCard : ''}
         ${extraClass}
       `}
     >
