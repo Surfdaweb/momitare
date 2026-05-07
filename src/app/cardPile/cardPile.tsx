@@ -44,8 +44,17 @@ export default function CardPile({
       }}
       className={`${styles.card} 
         ${isFaceUp ? '' : styles.faceDownCard}
-        ${isCompletedFoundation ? styles.completedFoundation : ''}
         ${isSelected ? styles.selectedCard : ''}
+        ${cards.length === 2 ? styles.cardStack2 : ''}
+        ${cards.length === 3 ? styles.cardStack3 : ''}
+        ${cards.length === 4 ? styles.cardStack4 : ''}
+        ${cards.length === 5 ? styles.cardStack5 : ''}
+        ${cards.length === 6 ? styles.cardStack6 : ''}
+        ${cards.length === 7 ? styles.cardStack7 : ''}
+        ${cards.length === 8 ? styles.cardStack8 : ''}
+        ${cards.length === 9 ? styles.cardStack9 : ''}
+        ${cards.length >= 10 ? styles.cardStack10Plus : ''}
+        ${isCompletedFoundation ? styles.completedFoundation : ''}
         ${extraClass}
       `}
     >
