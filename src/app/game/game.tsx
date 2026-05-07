@@ -165,7 +165,7 @@ export default function Game({
                 name={`Hand ${(index + 1).toString()}`}
                 extraClass={
                   selectedCard && !selectedCard.isTableau && index === selectedCard.index
-                    ? `${styles.selected} ${styles.selectedCard}`
+                    ? styles.selectedCard
                     : ''
                 }
                 handleCardPileInteract={() => {
