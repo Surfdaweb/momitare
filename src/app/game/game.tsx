@@ -92,9 +92,15 @@ export default function Game({
       drawnCard &&
       ((index + 1 === drawnCard.value && index < 10) || (index === drawnCard.value && index > 10))
     ) {
-      handleCardPileInteract = openClosePile;
+      handleCardPileInteract = () => {
+        openClosePile();
+        setSelectedCard(undefined);
+      };
     } else if (cards.length > 0 && index === 10) {
-      handleCardPileInteract = drawCard;
+      handleCardPileInteract = () => {
+        drawCard();
+        setSelectedCard(undefined);
+      };
     } else if (cards.length > 0) {
       handleCardPileInteract = () => {
         setSelectedCard({ card: cards[cards.length - 1], isTableau: true, index: index });
