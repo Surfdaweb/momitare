@@ -142,6 +142,12 @@ describe('GameLogic', () => {
     });
 
     describe('when the game starts', () => {
+      it('does not show any modals', () => {
+        render(<GameLogic />);
+        const modals = screen.queryByRole('dialog');
+        expect(modals).not.toBeInTheDocument();
+      });
+
       it('seeds the tableau piles correctly', () => {
         render(<GameLogic />);
         const tableauSection = screen.getByTestId('tableau');
@@ -969,6 +975,17 @@ describe('GameLogic', () => {
     });
 
     describe('when a new game is started', () => {
+      it('shows a modal and asks the user to confirm starting a new game', async () => {
+        const user = userEvent.setup();
+        render(<GameLogic></GameLogic>);
+
+        const newGameBtn = screen.getByRole('button', { name: 'New Game' });
+        await user.click(newGameBtn);
+
+        expect(screen.getByRole('dialog')).toBeVisible();
+        expect(screen.getByText('Are you sure you want to start a new game?')).toBeVisible();
+      });
+
       it('resets the score to 104', async () => {
         const user = userEvent.setup();
         render(<GameLogic></GameLogic>);
@@ -990,6 +1007,8 @@ describe('GameLogic', () => {
 
         const newGameBtn = screen.getByRole('button', { name: 'New Game' });
         await user.click(newGameBtn);
+        const confirmBtn = screen.getByRole('button', { name: 'Start New Game' });
+        await user.click(confirmBtn);
 
         expect(screen.getByText('104')).toBeVisible();
       });
@@ -1009,6 +1028,8 @@ describe('GameLogic', () => {
 
         const newGameBtn = screen.getByRole('button', { name: 'New Game' });
         await user.click(newGameBtn);
+        const confirmBtn = screen.getByRole('button', { name: 'Start New Game' });
+        await user.click(confirmBtn);
 
         expect(within(foundations[0]).queryByText('A')).toBeVisible();
         expect(within(foundations[0]).queryByAltText('of Spades')).not.toBeInTheDocument();
@@ -1025,6 +1046,8 @@ describe('GameLogic', () => {
 
         const newGameBtn = screen.getByRole('button', { name: 'New Game' });
         await user.click(newGameBtn);
+        const confirmBtn = screen.getByRole('button', { name: 'Start New Game' });
+        await user.click(confirmBtn);
 
         const hand = screen.getByTestId('hand');
         const cardsInHand = within(hand).queryAllByRole('button');
@@ -1050,6 +1073,9 @@ describe('GameLogic', () => {
 
         const newGameBtn = screen.getByRole('button', { name: 'New Game' });
         await user.click(newGameBtn);
+        const confirmBtn = screen.getByRole('button', { name: 'Start New Game' });
+        await user.click(confirmBtn);
+
         await user.click(tableauPiles[0]);
 
         const hand = screen.getByTestId('hand');
@@ -1095,6 +1121,8 @@ describe('GameLogic', () => {
 
         const newGameBtn = screen.getByRole('button', { name: 'New Game' });
         await user.click(newGameBtn);
+        const confirmBtn = screen.getByRole('button', { name: 'Start New Game' });
+        await user.click(confirmBtn);
 
         const tableauSection = screen.getByTestId('tableau');
         const tableauPiles = within(tableauSection).getAllByRole('button');
