@@ -5,6 +5,7 @@ import ActionBar from '../actionBar/actionBar';
 import { Card } from '../cardContent/cardContent';
 import Footer from '../footer/footer';
 import Game from '../game/game';
+import Modal from '../modal/modal';
 import { BuildDeckService } from '../services/buildDeck/buildDeck.service';
 import styles from './gameLogic.module.scss';
 
@@ -44,6 +45,7 @@ export default function GameLogic() {
   const [drawnCard, setDrawnCard] = useState<Card>();
   const [score, setScore] = useState<number>(104);
   const [commandStack, setCommandStack] = useState<Command[]>([]);
+  const [newGameModalIsOpen, setNewGameModalIsOpen] = useState<boolean>(false);
 
   const dealNewGame = (): Card[][] => {
     const deck: Card[] = BuildDeckService.buildDeck();
@@ -431,9 +433,32 @@ export default function GameLogic() {
     setTableau(dealNewGame());
   }, []);
 
+  const newGameModalContent = 'Are you sure you want to start a new game?';
+  const newGameModalConfirmButtonText = 'Start New Game';
+  const newGameModalExitButtonText = 'Return To Game';
+
   return (
     <>
-      <ActionBar undoMove={undoMove} startNewGame={startNewGame} />
+      {newGameModalIsOpen && (
+        <Modal
+          content={newGameModalContent}
+          confirmButtonText={newGameModalConfirmButtonText}
+          exitButtonText={newGameModalExitButtonText}
+          handleConfirm={() => {
+            startNewGame();
+            setNewGameModalIsOpen(false);
+          }}
+          handleExit={() => {
+            setNewGameModalIsOpen(false);
+          }}
+        />
+      )}
+      <ActionBar
+        undoMove={undoMove}
+        startNewGame={() => {
+          setNewGameModalIsOpen(true);
+        }}
+      />
       <main className={styles.mainContent}>
         <Game
           addCardToFoundation={addCardToFoundation}

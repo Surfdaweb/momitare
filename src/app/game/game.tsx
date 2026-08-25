@@ -78,15 +78,58 @@ export default function Game({
     }
   };
 
+  const assignFoundationsLabel = (index: number): string => {
+    let label = 'A';
+    if (index > 3) {
+      label = 'K';
+    }
+    return label;
+  };
+
+  const assignTableauInteraction = (cards: Card[], index: number): (() => void) => {
+    let handleCardPileInteract = () => {};
+    if (
+      drawnCard &&
+      ((index + 1 === drawnCard.value && index < 10) || (index === drawnCard.value && index > 10))
+    ) {
+      handleCardPileInteract = () => {
+        openClosePile();
+        setSelectedCard(undefined);
+      };
+    } else if (cards.length > 0 && index === 10) {
+      handleCardPileInteract = () => {
+        drawCard();
+        setSelectedCard(undefined);
+      };
+    } else if (cards.length > 0) {
+      handleCardPileInteract = () => {
+        setSelectedCard({ card: cards[cards.length - 1], isTableau: true, index: index });
+      };
+    }
+    return handleCardPileInteract;
+  };
+
+  const assignTableauLabel = (index: number): string => {
+    let label = (index + 1).toString();
+    if (index === 0) {
+      label = 'A';
+    } else if (index === 10) {
+      label = 'S';
+    } else if (index === 11) {
+      label = 'J';
+    } else if (index === 12) {
+      label = 'Q';
+    } else if (index === 13) {
+      label = 'K';
+    }
+    return label;
+  };
+
   return (
     <>
       <div className={styles.gameContainer}>
         <div className={styles.foundations} data-testid="foundations">
           {foundations.map((cards, index) => {
-            let label = 'A';
-            if (index > 3) {
-              label = 'K';
-            }
             return (
               <CardPile
                 handleCardPileInteract={() => {
@@ -97,47 +140,17 @@ export default function Game({
                 key={index}
                 name={`Foundation ${index.toString()}`}
                 cards={cards}
-                label={label}
+                label={assignFoundationsLabel(index)}
               />
             );
           })}
         </div>
         <div className={styles.tableau} data-testid="tableau">
           {tableau.map((cards, index) => {
-            let label = (index + 1).toString();
-            let handleCardPileInteract = () => {};
-            if (
-              drawnCard &&
-              ((index + 1 === drawnCard.value && index < 10) ||
-                (index === drawnCard.value && index > 10))
-            ) {
-              handleCardPileInteract = openClosePile;
-            } else {
-              if (cards.length > 0) {
-                handleCardPileInteract = () => {
-                  setSelectedCard({ card: cards[cards.length - 1], isTableau: true, index: index });
-                };
-              }
-            }
-
-            if (index === 0) {
-              label = 'A';
-            } else if (index === 10) {
-              label = 'S';
-              handleCardPileInteract = drawCard;
-            } else if (index === 11) {
-              label = 'J';
-            } else if (index === 12) {
-              label = 'Q';
-            } else if (index === 13) {
-              label = 'K';
-            }
-
+            const label = assignTableauLabel(index);
             return (
               <CardPile
-                handleCardPileInteract={() => {
-                  handleCardPileInteract();
-                }}
+                handleCardPileInteract={assignTableauInteraction(cards, index)}
                 key={index}
                 name={`Tableau ${(index + 1).toString()}`}
                 isSelected={selectedCard && selectedCard.isTableau && index === selectedCard.index}
